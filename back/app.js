@@ -1,14 +1,18 @@
 var createError = require('http-errors');
-var express = require('express');
+const express = require('express');
 var path = require('path');
 var adaro = require('adaro');
 var cookieParser = require('cookie-parser');
 const morganMiddleware = require('./src/middlewares/morganMiddleware');
+const dotenv = require('dotenv');
 
-var indexRouter = require('./src/routes');
-var usersRouter = require('./src/routes/users');
+dotenv.config(); //.env 파일의 환경 변수 로드
 
-var app = express();
+const indexRouter = require('./src/routes');
+const usersRouter = require('./src/routes/users');
+
+const app = express();
+
 
 // view engine setup
 app.engine('dust', adaro.dust());

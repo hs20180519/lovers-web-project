@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model account_book_posts {
+  account_book_post_id Int      @id @unique(map: "payemnt_id_UNIQUE") @default(autoincrement())
+  lover_id             Int
+  category             String?  @db.VarChar(10)
+  amount               Int
+  use_date             DateTime @db.DateTime(0)
+  user_id              Int
+  content              String?  @db.VarChar(45)
+  lovers               lovers   @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-account_books_posts-lovers")
+  users                users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-payments-users")
+
+  @@index([lover_id], map: "fk-account_books_posts-lovers_idx")
+  @@index([user_id], map: "fk-payments-users_idx")
+}
+
+model comments {
+  comment_id    Int         @id @unique(map: "comment_id_UNIQUE") @default(autoincrement())
+  diary_post_id Int
+  content       String      @db.VarChar(127)
+  create_date   DateTime    @db.DateTime(0)
+  diary_posts   diary_posts @relation(fields: [diary_post_id], references: [diary_post_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-comments-posts")
+
+  @@index([diary_post_id], map: "fk_comments_post_id_idx")
+}
+
+model diary_posts {
+  diary_post_id     Int        @id @unique(map: "post_id_UNIQUE") @default(autoincrement())
+  title             String     @db.VarChar(30)
+  content           String     @db.VarChar(255)
+  lover_id          Int
+  image             String?    @db.VarChar(255)
+  has_image_checked Int?       @db.TinyInt
+  post_date         DateTime   @db.DateTime(0)
+  user_id           Int
+  comments          comments[]
+  lovers            lovers     @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-posts-lovers")
+  users             users      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-posts-users")
+
+  @@index([lover_id], map: "fk-posts-lovers_idx")
+  @@index([user_id], map: "fk_posts_author_idx")
+}
+
+model gallery_posts {
+  gallery_post_id Int    @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
+  lover_id        Int
+  image           String @db.VarChar(255)
+  liked_count     Int?
+  lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-gallerys-lovers")
+
+  @@index([lover_id], map: "fk-gallerys-lovers_idx")
+}
+
+model lovers {
+  lover_id                      Int                  @id @unique(map: "lovers_id_UNIQUE") @default(autoincrement())
+  user_a_id                     Int                  @unique(map: "user_a_id_UNIQUE")
+  user_b_id                     Int                  @unique(map: "user_b_id_UNIQUE")
+  account_book_posts            account_book_posts[]
+  diary_posts                   diary_posts[]
+  gallery_posts                 gallery_posts[]
+  users_lovers_user_a_idTousers users                @relation("lovers_user_a_idTousers", fields: [user_a_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-lovers-users-user_a_id")
+  users_lovers_user_b_idTousers users                @relation("lovers_user_b_idTousers", fields: [user_b_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-lovers-users-user_b_id")
+}
+
+model users {
+  user_id                        Int                  @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
+  email                          String               @unique(map: "email_UNIQUE") @db.VarChar(30)
+  password                       String               @db.VarChar(30)
+  profile_image                  String?              @db.VarChar(255)
+  lover_id                       Int?
+  lover_nickname                 String?              @db.VarChar(10)
+  is_accepted                    Int?                 @db.TinyInt
+  has_applied                    Int?                 @db.TinyInt
+  has_apply                      Int?                 @db.TinyInt
+  nickname                       String               @unique(map: "nickname_UNIQUE") @db.VarChar(30)
+  account_book_posts             account_book_posts[]
+  diary_posts                    diary_posts[]
+  lovers_lovers_user_a_idTousers lovers?              @relation("lovers_user_a_idTousers")
+  lovers_lovers_user_b_idTousers lovers?              @relation("lovers_user_b_idTousers")
+}
