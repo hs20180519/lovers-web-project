@@ -55,7 +55,7 @@ if (process.env.NODE_ENV !== 'production'){
     logger.add(
         new winston.transports.Console({
             format: winston.format.combine(
-                winston.format.colorize(), //log level별 색상 적용
+                winston.format.colorize(), //log level 별 색상 적용
                 winston.format.simple(),
             ),
         }),

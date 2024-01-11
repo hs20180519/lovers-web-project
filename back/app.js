@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var adaro = require('adaro');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const morganMiddleware = require('./src/middlewares/morganMiddleware');
 
 var indexRouter = require('./src/routes');
 var usersRouter = require('./src/routes/users');
@@ -15,7 +15,7 @@ app.engine('dust', adaro.dust());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'dust');
 
-app.use(logger('dev'));
+app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
