@@ -1,12 +1,11 @@
 const winston = require('winston');
 const winstonDaily = require('winston-daily-rotate-file');
-const process = require('process');
 const {exceptions} = require("winston");
+const path = require("path");
 
 const { combine, timestamp, label, printf } = winston.format;
-
 //log 파일 저장 경로
-const logDir = `${process.cwd()}/back/src/logs`;
+const logDir = path.join('back','src','logs');
 
 const logFormat = printf(({ level, message, label, timestamp}) => {
     return `${timestamp} [${label}] ${level}: ${message}`; //날짜 [시스템 이름] 로그레벨 메시지
