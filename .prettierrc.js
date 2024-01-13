@@ -1,9 +1,9 @@
 module.exports = {
-  semi: true,
-  trailingComma: "all",
-  singleQuote: true,
+  semi: true, //문장 끝에 세미콜론 추가
+  trailingComma: 'all',
+  singleQuote: false,
   printWidth: 100,
   tabWidth: 2,
-  useTabs: true,
+  useTabs: false, //탭 대신 공백
   bracketSpacing: true,
 };
