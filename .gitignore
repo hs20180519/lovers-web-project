@@ -8,7 +8,6 @@
 /dataSources.local.xml
 
 back/node_modules/
-node_modules/
 back/src/logs/
 
 .env
