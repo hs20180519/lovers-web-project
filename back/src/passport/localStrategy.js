@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const logger = require("../config/logger");
 
 //사용자의 식별을 이메일로
-const localOptions = { _usernameField: "email", _passwordField: "password" };
+const localOptions = { usernameField: "email", passwordField: "password" };
 
 const localStrategy = new LocalStrategy(localOptions, async (email, password, done) => {
   try {
@@ -15,9 +15,7 @@ const localStrategy = new LocalStrategy(localOptions, async (email, password, do
     if (!user) {
       return done(null, false, { message: "Incorrect email" });
     }
-
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (isMatch) {
       return done(null, user);
     } else {

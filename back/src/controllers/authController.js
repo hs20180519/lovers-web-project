@@ -16,7 +16,6 @@ class AuthController {
 
   async login(req, res) {
     const { email, password } = req.body;
-
     try {
       const user = await authService.loginUser(email, password);
       if (user) {

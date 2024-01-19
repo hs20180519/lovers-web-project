@@ -19,6 +19,8 @@ class AuthService {
   }
 
   async loginUser(email, password) {
+    //localStrategy 에서 검증함
+    //다른 예외 처리 필요
     try {
       const user = await prisma.users.findUnique({
         where: { email },
