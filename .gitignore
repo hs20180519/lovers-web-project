@@ -10,4 +10,4 @@
 back/node_modules/
 back/src/logs/
 
-.env
+back/.env

@@ -1,11 +1,11 @@
-const winston = require('winston');
-const winstonDaily = require('winston-daily-rotate-file');
-const { exceptions } = require('winston');
-const path = require('path');
+const winston = require("winston");
+const winstonDaily = require("winston-daily-rotate-file");
+const { exceptions } = require("winston");
+const path = require("path");
 
 const { combine, timestamp, label, printf } = winston.format;
 //log 파일 저장 경로
-const logDir = path.join('src', 'logs');
+const logDir = path.join("src", "logs");
 
 const logFormat = printf(({ level, message, label, timestamp }) => {
   return `${timestamp} [${label}] ${level}: ${message}`; //날짜 [시스템 이름] 로그레벨 메시지
@@ -13,15 +13,15 @@ const logFormat = printf(({ level, message, label, timestamp }) => {
 
 const logger = winston.createLogger({
   format: combine(
-    timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    label({ label: 'winston 연습' }),
+    timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    label({ label: "winston 연습" }),
     logFormat,
   ),
 
   transports: [
     new winstonDaily({
-      level: 'info',
-      datePattern: 'YYYY-MM-DD',
+      level: "info",
+      datePattern: "YYYY-MM-DD",
       dirname: logDir,
       filename: `%DATE%.log`,
       maxFiles: 30, //최근 30개 로그 파일
@@ -29,9 +29,9 @@ const logger = winston.createLogger({
     }),
 
     new winstonDaily({
-      level: 'error',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/error',
+      level: "error",
+      datePattern: "YYYY-MM-DD",
+      dirname: logDir + "/error",
       filename: `%DATE%.error.log`,
       maxFiles: 30, //최근 30개 로그 파일
       zippedArchive: true,
@@ -39,8 +39,8 @@ const logger = winston.createLogger({
   ],
   exceptionHandlers: [
     new winstonDaily({
-      level: 'error',
-      datePattern: 'YYYY-MM-DD',
+      level: "error",
+      datePattern: "YYYY-MM-DD",
       dirname: logDir,
       filename: `%DATE%.exception.log`,
       maxFiles: 30,
@@ -50,7 +50,7 @@ const logger = winston.createLogger({
 });
 
 //production 환경이 아닌 개발 환경일 경우, 로그 화면에 바로 보이도록
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
       format: winston.format.combine(
