@@ -35,21 +35,24 @@ class AuthService {
   }
 
   //이메일, 보안문자 받아서 해당 이메일의 보안문자인지 확인
-  async verifyEmailCode(email, verificationCode) {
+  async confirmEmailCode(
+    email,
+    verificationCode,
+  ) {
     try {
       const user =
         await prisma.verifications.findFirst({
           where: { email },
         });
       if (!user) {
-        //이메일을 보내지 않았을 때 - 수정 필요
+        //이메일을 보내지 않았을 때
         return null;
       }
       if (
+        //보안문자가 틀렸을 때
         user.verification_code !==
         verificationCode
       ) {
-        //보안문자가 틀렸을 때
         return false;
       }
       return user;
@@ -71,6 +74,21 @@ class AuthService {
           nickname,
         },
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteVerificationCode(email) {
+    try {
+      const user =
+        await prisma.verifications.deleteMany({
+          where: { email },
+        });
+      if (!user) {
+        return null;
+      }
+      return user;
     } catch (error) {
       throw error;
     }

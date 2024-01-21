@@ -1,20 +1,22 @@
 const winston = require("winston");
 const winstonDaily = require("winston-daily-rotate-file");
-const { exceptions } = require("winston");
 const path = require("path");
 
-const { combine, timestamp, label, printf } = winston.format;
+const { combine, timestamp, printf } =
+  winston.format;
 //log 파일 저장 경로
 const logDir = path.join("src", "logs");
 
-const logFormat = printf(({ level, message, label, timestamp }) => {
-  return `${timestamp} [${label}] ${level}: ${message}`; //날짜 [시스템 이름] 로그레벨 메시지
-});
+const logFormat = printf(
+  ({ level, message, label, timestamp }) => {
+    return `${timestamp} [${label}] ${level}: ${message}`; //날짜 [시스템 이름] 로그레벨 메시지
+  },
+);
 
 const logger = winston.createLogger({
   format: combine(
     timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    label({ label: "winston 연습" }),
+    //label({ label: "winston 연습" }),
     logFormat,
   ),
 

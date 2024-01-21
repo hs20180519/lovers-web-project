@@ -2,7 +2,7 @@ const authService = require("../services/authService");
 const logger = require("../config/logger");
 
 class AuthController {
-  async test(req, res) {
+  async sendVerificationEmail(req, res) {
     const { email } = req.body;
     try {
       const user =
@@ -16,27 +16,38 @@ class AuthController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error("Error during test", error);
+      logger.error(
+        "Error during sendVerificationEmail",
+        error,
+      );
     }
   }
 
-  async test2(req, res) {
+  async verifyEmailCode(req, res) {
     const { email, verificationCode } = req.body;
     try {
       const user =
-        await authService.verifyEmailCode(
+        await authService.confirmEmailCode(
           email,
           verificationCode,
         );
+      if (user == null) {
+        res.status(500).json({
+          error:
+            "해당 이메일로 전송된 인증번호가 없습니다.",
+        });
+      }
       if (!user) {
         res.status(500).json({
           error: "보안문자가 일치하지 않습니다.",
         });
       }
-      console.log("일치");
       res.status(201).json({ user });
     } catch (error) {
-      logger.error("test2", error);
+      logger.error(
+        "Error during verifyEmailCode",
+        error,
+      );
     }
   }
 
@@ -50,15 +61,28 @@ class AuthController {
         password,
         nickname,
       );
+      if (!user) {
+        res.status(500).json({
+          error: "회원가입에 실패했습니다.",
+        });
+      }
+      const deleteUser =
+        await authService.deleteVerificationCode(
+          email,
+        );
+
+      if (!deleteUser) {
+        //시간이 지나면 자동 삭제 옵션을 주는게 나을 것
+        res.status(500).json({
+          error: "인증번호 삭제에 실패했습니다.",
+        });
+      }
       res.status(201).json({ user });
     } catch (error) {
       logger.error(
-        "Error during user registration",
+        "Error during register",
         error,
       );
-      res
-        .status(500)
-        .json({ error: "Internal server error" });
     }
   }
 
@@ -81,9 +105,6 @@ class AuthController {
         "Error during user login",
         error,
       );
-      res
-        .status(500)
-        .json({ error: "Internal server error" });
     }
   }
 }
