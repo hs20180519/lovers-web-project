@@ -70,6 +70,11 @@ model lovers {
   users_lovers_user_b_idTousers users                @relation("lovers_user_b_idTousers", fields: [user_b_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-lovers-users-user_b_id")
 }
 
+model verifications {
+  verification_id               Int                  @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
+  email                          String              @db.VarChar(30)
+  verification_code             String               @db.VarChar(10)
+}
 model users {
   user_id                        Int                  @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
   email                          String               @unique(map: "email_UNIQUE") @db.VarChar(30)
