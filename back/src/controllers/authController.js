@@ -37,7 +37,7 @@ class AuthController {
     }
   }
 
-  async register(req, res) {
+  async registerUser(req, res) {
     const { email, password, nickname } = req.body;
 
     try {
@@ -61,10 +61,10 @@ class AuthController {
     }
   }
 
-  async login(req, res) {
-    const { email, password } = req.body;
+  async createUser(req, res) {
+    const { email } = req.body;
     try {
-      const user = await authService.login(email, password);
+      const user = await authService.createUser(email);
       if (user) {
         res.status(200).json({ user });
       } else {
