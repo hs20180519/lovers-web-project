@@ -12,7 +12,7 @@ authRouter.post(
 );
 authRouter.post(
   "/verify-code",
-  authController.verifyEmailCode,
+  authController.confirmEmailCode,
 );
 authRouter.post(
   "/register",

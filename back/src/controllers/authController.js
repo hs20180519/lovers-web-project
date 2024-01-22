@@ -23,7 +23,7 @@ class AuthController {
     }
   }
 
-  async verifyEmailCode(req, res) {
+  async confirmEmailCode(req, res) {
     const { email, verificationCode } = req.body;
     try {
       const user =
