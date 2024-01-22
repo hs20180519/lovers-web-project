@@ -13,5 +13,6 @@ authRouter.post("/login", authenticateLocal, authController.createUser);
 authRouter.delete("/:userId", authenticateJwt, authController.deleteUser);
 
 authRouter.get("/nickname/:email", authController.findUserNickname);
-//authRouter.patch("/password", authController.)
+authRouter.patch("/password", authController.findUserPassword);
+
 module.exports = authRouter;

@@ -136,6 +136,38 @@ class AuthService {
       throw error;
     }
   }
+  async getUserByNickname(nickname) {
+    try {
+      const user = await prisma.users.findUnique({
+        where: { nickname },
+      });
+      if (!user) {
+        return false;
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendTemporaryPasswordEmail(email) {
+    try {
+      //여섯 자리의 랜덤 비밀번호 생성
+      const temporaryPassword = Math.floor(100000 + Math.random() * 900000).toString();
+      const subject = "[ACT]임시 비밀번호 안내";
+      const text = `고객님의 임시 비밀번호는 ${temporaryPassword} 입니다.`;
+
+      //메일 보내기
+      await emailService.sendEmail(email, subject, text);
+
+      const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
+      return await prisma.users.update({
+        where: { email },
+        data: { password: hashedPassword },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AuthService();

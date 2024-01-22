@@ -100,6 +100,22 @@ class AuthController {
       logger.error("Error during find user nickname", error);
     }
   }
+
+  async findUserPassword(req, res) {
+    const { nickname } = req.body;
+    try {
+      const user = await authService.getUserByNickname(nickname);
+      if (!user) {
+        res.status(401).json({
+          error: "Invalid nickname",
+        });
+      }
+      const updatedUser = await authService.sendTemporaryPasswordEmail(user.email);
+      res.status(200).json({ updatedUser });
+    } catch (error) {
+      logger.error("Error during find user password", error);
+    }
+  }
 }
 
 module.exports = new AuthController();
