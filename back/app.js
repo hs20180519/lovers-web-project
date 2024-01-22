@@ -6,6 +6,7 @@ var cookieParser = require("cookie-parser");
 const morganMiddleware = require("./src/middlewares/morganMiddleware");
 const dotenv = require("dotenv");
 const authRouter = require("./src/routes/authRouter");
+const loverRouter = require("./src/routes/loverRouter");
 
 dotenv.config(); //.env 파일의 환경 변수 로드
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
+app.use("/lover", loverRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
