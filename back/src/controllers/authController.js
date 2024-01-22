@@ -90,6 +90,16 @@ class AuthController {
       logger.error("Error during user delete", error);
     }
   }
+
+  async findUserNickname(req, res) {
+    const { email } = req.params;
+    try {
+      const nickname = await authService.sendNicknameEmail(email);
+      res.status(200).json({ nickname });
+    } catch (error) {
+      logger.error("Error during find user nickname", error);
+    }
+  }
 }
 
 module.exports = new AuthController();

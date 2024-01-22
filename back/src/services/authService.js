@@ -114,6 +114,28 @@ class AuthService {
       throw error;
     }
   }
+
+  async sendNicknameEmail(email) {
+    try {
+      const user = await prisma.users.findUnique({
+        where: { email },
+      });
+
+      // 해당 이메일 유저가 없을 때
+      if (!user) {
+        return false;
+      }
+      const subject = "[ACT]닉네임 안내";
+      const text = `고객님의 닉네임은 ${user.nickname} 입니다.`;
+
+      //메일 보내기
+      await emailService.sendEmail(email, subject, text);
+
+      return user.nickname;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AuthService();

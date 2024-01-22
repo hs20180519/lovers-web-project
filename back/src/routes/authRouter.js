@@ -12,6 +12,6 @@ authRouter.post("/login", authenticateLocal, authController.createUser);
 
 authRouter.delete("/:userId", authenticateJwt, authController.deleteUser);
 
-//authRouter.get("/nickname", authController);
+authRouter.get("/nickname/:email", authController.findUserNickname);
 //authRouter.patch("/password", authController.)
 module.exports = authRouter;
