@@ -78,7 +78,7 @@ class AuthService {
     }
   }
 
-  async login(email) {
+  async createUser(email) {
     //localStrategy 에서 검증함
     //다른 예외 처리 필요
     try {
@@ -110,6 +110,60 @@ class AuthService {
         where: { user_id: userId },
       });
       return true; // 성공적으로 삭제
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async sendNicknameEmail(email) {
+    try {
+      const user = await prisma.users.findUnique({
+        where: { email },
+      });
+
+      // 해당 이메일 유저가 없을 때
+      if (!user) {
+        return false;
+      }
+      const subject = "[ACT]닉네임 안내";
+      const text = `고객님의 닉네임은 ${user.nickname} 입니다.`;
+
+      //메일 보내기
+      await emailService.sendEmail(email, subject, text);
+
+      return user.nickname;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getUserByNickname(nickname) {
+    try {
+      const user = await prisma.users.findUnique({
+        where: { nickname },
+      });
+      if (!user) {
+        return false;
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendTemporaryPasswordEmail(email) {
+    try {
+      //여섯 자리의 랜덤 비밀번호 생성
+      const temporaryPassword = Math.floor(100000 + Math.random() * 900000).toString();
+      const subject = "[ACT]임시 비밀번호 안내";
+      const text = `고객님의 임시 비밀번호는 ${temporaryPassword} 입니다.`;
+
+      //메일 보내기
+      await emailService.sendEmail(email, subject, text);
+
+      const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
+      return await prisma.users.update({
+        where: { email },
+        data: { password: hashedPassword },
+      });
     } catch (error) {
       throw error;
     }

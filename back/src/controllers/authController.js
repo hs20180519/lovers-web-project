@@ -37,7 +37,7 @@ class AuthController {
     }
   }
 
-  async register(req, res) {
+  async registerUser(req, res) {
     const { email, password, nickname } = req.body;
 
     try {
@@ -61,10 +61,10 @@ class AuthController {
     }
   }
 
-  async login(req, res) {
-    const { email, password } = req.body;
+  async createUser(req, res) {
+    const { email } = req.body;
     try {
-      const user = await authService.login(email, password);
+      const user = await authService.createUser(email);
       if (user) {
         res.status(200).json({ user });
       } else {
@@ -88,6 +88,32 @@ class AuthController {
       res.status(200).json({ message: "탈퇴 성공!" });
     } catch (error) {
       logger.error("Error during user delete", error);
+    }
+  }
+
+  async findUserNickname(req, res) {
+    const { email } = req.params;
+    try {
+      const nickname = await authService.sendNicknameEmail(email);
+      res.status(200).json({ nickname });
+    } catch (error) {
+      logger.error("Error during find user nickname", error);
+    }
+  }
+
+  async findUserPassword(req, res) {
+    const { nickname } = req.body;
+    try {
+      const user = await authService.getUserByNickname(nickname);
+      if (!user) {
+        res.status(401).json({
+          error: "Invalid nickname",
+        });
+      }
+      const updatedUser = await authService.sendTemporaryPasswordEmail(user.email);
+      res.status(200).json({ updatedUser });
+    } catch (error) {
+      logger.error("Error during find user password", error);
     }
   }
 }
