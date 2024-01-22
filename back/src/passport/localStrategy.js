@@ -23,7 +23,7 @@ const localStrategy = new LocalStrategy(localOptions, async (email, password, do
     }
   } catch (error) {
     logger.error("Error in local strategy", error);
-    return done(error, false, { message: "Internal server error" });
+    return done(error, false);
   }
 });
 

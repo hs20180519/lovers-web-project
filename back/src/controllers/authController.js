@@ -5,10 +5,7 @@ class AuthController {
   async sendVerificationEmail(req, res) {
     const { email } = req.body;
     try {
-      const user =
-        await authService.sendVerificationEmail(
-          email,
-        );
+      const user = await authService.sendVerificationEmail(email);
       if (!user) {
         res.status(500).json({
           error: "Error during sending email",
@@ -16,25 +13,17 @@ class AuthController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error(
-        "Error during sendVerificationEmail",
-        error,
-      );
+      logger.error("Error during sendVerificationEmail", error);
     }
   }
 
   async confirmEmailCode(req, res) {
     const { email, verificationCode } = req.body;
     try {
-      const user =
-        await authService.confirmEmailCode(
-          email,
-          verificationCode,
-        );
+      const user = await authService.confirmEmailCode(email, verificationCode);
       if (user == null) {
         res.status(500).json({
-          error:
-            "해당 이메일로 전송된 인증번호가 없습니다.",
+          error: "해당 이메일로 전송된 인증번호가 없습니다.",
         });
       }
       if (!user) {
@@ -44,32 +33,21 @@ class AuthController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error(
-        "Error during verifyEmailCode",
-        error,
-      );
+      logger.error("Error during verifyEmailCode", error);
     }
   }
 
   async register(req, res) {
-    const { email, password, nickname } =
-      req.body;
+    const { email, password, nickname } = req.body;
 
     try {
-      const user = await authService.register(
-        email,
-        password,
-        nickname,
-      );
+      const user = await authService.register(email, password, nickname);
       if (!user) {
         res.status(500).json({
           error: "회원가입에 실패했습니다.",
         });
       }
-      const deleteUser =
-        await authService.deleteVerificationCode(
-          email,
-        );
+      const deleteUser = await authService.deleteVerificationCode(email);
 
       if (!deleteUser) {
         //시간이 지나면 자동 삭제 옵션을 주는게 나을 것
@@ -79,20 +57,14 @@ class AuthController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error(
-        "Error during register",
-        error,
-      );
+      logger.error("Error during register", error);
     }
   }
 
   async login(req, res) {
     const { email, password } = req.body;
     try {
-      const user = await authService.login(
-        email,
-        password,
-      );
+      const user = await authService.login(email, password);
       if (user) {
         res.status(200).json({ user });
       } else {
@@ -101,10 +73,21 @@ class AuthController {
         });
       }
     } catch (error) {
-      logger.error(
-        "Error during user login",
-        error,
-      );
+      logger.error("Error during user login", error);
+    }
+  }
+  async deleteUser(req, res) {
+    const userId = req.user.user_id;
+    try {
+      const result = await authService.deleteUser(userId);
+      if (!result) {
+        res.status(401).json({
+          error: "Invalid userId",
+        });
+      }
+      res.status(200).json({ message: "탈퇴 성공!" });
+    } catch (error) {
+      logger.error("Error during user delete", error);
     }
   }
 }
