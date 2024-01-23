@@ -47,8 +47,8 @@ class AuthController {
           error: "회원가입에 실패했습니다.",
         });
       }
-      const deleteUser = await authService.deleteVerificationCode(email);
 
+      const deleteUser = await authService.deleteVerificationCode(email);
       if (!deleteUser) {
         //시간이 지나면 자동 삭제 옵션을 주는게 나을 것
         res.status(500).json({
@@ -95,16 +95,15 @@ class AuthController {
     const { email } = req.params;
     try {
       const user = await authService.getUserByEmail(email);
-
       if (!user) {
         res.status(500).json({ error: "Invalid email" });
       }
+
       const nickname = await authService.sendNicknameEmail(user);
-      console.log(user.email);
-      console.log(nickname);
       if (!nickname) {
         res.status(500).json({ error: "Error sending email" });
       }
+
       res.status(200).json({ nickname });
     } catch (error) {
       logger.error("Error during find user nickname", error);
@@ -120,7 +119,13 @@ class AuthController {
           error: "Invalid nickname",
         });
       }
+
       const updatedUser = await authService.sendTemporaryPasswordEmail(user.email);
+      if (!updatedUser) {
+        res.status(401).json({
+          error: "Error in update password",
+        });
+      }
       res.status(200).json({ updatedUser });
     } catch (error) {
       logger.error("Error during find user password", error);
