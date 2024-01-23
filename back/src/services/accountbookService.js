@@ -32,12 +32,24 @@ class AccountbookService {
 
   async getAccountbook(account_book_post_id) {
     try {
-      const accountbookPost = await prisma.account_book_posts.findUnique({
+      const accountbookInformation = await prisma.account_book_posts.findUnique({
         where: { account_book_post_id },
       });
-      if (!accountbookPost) {
-        return falsel;
+      if (!accountbookInformation) {
+        return false;
       }
+
+      const user = await prisma.users.findUnique({
+        where: { user_id: accountbookInformation.user_id },
+      });
+
+      const accountbookPost = {
+        nickname: user.nickname,
+        category: accountbookInformation.category,
+        amount: accountbookInformation.amount,
+        use_date: accountbookInformation.use_date,
+        content: accountbookInformation.content,
+      };
       return accountbookPost;
     } catch (error) {
       throw error;
