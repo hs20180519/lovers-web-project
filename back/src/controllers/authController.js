@@ -94,7 +94,17 @@ class AuthController {
   async findUserNickname(req, res) {
     const { email } = req.params;
     try {
-      const nickname = await authService.sendNicknameEmail(email);
+      const user = await authService.getUserByEmail(email);
+
+      if (!user) {
+        res.status(500).json({ error: "Invalid email" });
+      }
+      const nickname = await authService.sendNicknameEmail(user);
+      console.log(user.email);
+      console.log(nickname);
+      if (!nickname) {
+        res.status(500).json({ error: "Error sending email" });
+      }
       res.status(200).json({ nickname });
     } catch (error) {
       logger.error("Error during find user nickname", error);
