@@ -30,26 +30,21 @@ class AccountbookService {
     }
   }
 
-  async getAccountbook(account_book_post_id) {
+  async getAccountbook(lover_id, year, month) {
     try {
-      const accountbookInformation = await prisma.account_book_posts.findUnique({
-        where: { account_book_post_id },
+      const accountbookPost = await prisma.account_book_posts.findMany({
+        where: {
+          lover_id,
+          AND: [
+            { use_date: { gte: new Date(`${year}-${month}-01`) } },
+            { use_date: { lt: new Date(`${year}-${month + 1}-01`) } },
+          ],
+        },
       });
-      if (!accountbookInformation) {
+      if (!accountbookPost) {
         return false;
       }
 
-      const user = await prisma.users.findUnique({
-        where: { user_id: accountbookInformation.user_id },
-      });
-
-      const accountbookPost = {
-        nickname: user.nickname,
-        category: accountbookInformation.category,
-        amount: accountbookInformation.amount,
-        use_date: accountbookInformation.use_date,
-        content: accountbookInformation.content,
-      };
       return accountbookPost;
     } catch (error) {
       throw error;

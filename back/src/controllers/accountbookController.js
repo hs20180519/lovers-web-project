@@ -31,21 +31,17 @@ class AccountbookController {
           error: "Invalid account_book_post_id",
         });
       }
-      res.status(201).json({ message: "가계부 글 삭제 성공!" });
+      res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteAccountbook", error);
     }
   }
 
   async getAccountbook(req, res) {
-    const { account_book_post_id } = req.body;
+    const { lover_id, year, month } = req.body;
     try {
-      const accountbookPost = await accountbookService.getAccountbook(account_book_post_id);
-      if (!accountbookPost) {
-        res.status(401).json({
-          error: "Invalid account_book_post_id",
-        });
-      }
+      const accountbookPost = await accountbookService.getAccountbook(lover_id, year, month);
+
       res.status(201).json(accountbookPost);
     } catch (error) {
       logger.error("Error during getAccountbook", error);
