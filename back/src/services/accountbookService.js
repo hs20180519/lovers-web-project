@@ -29,6 +29,20 @@ class AccountbookService {
       throw error;
     }
   }
+
+  async getAccountbook(account_book_post_id) {
+    try {
+      const accountbookPost = await prisma.account_book_posts.findUnique({
+        where: { account_book_post_id },
+      });
+      if (!accountbookPost) {
+        return falsel;
+      }
+      return accountbookPost;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AccountbookService();
