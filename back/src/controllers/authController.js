@@ -66,13 +66,14 @@ class AuthController {
   async loginUser(req, res) {
     const { nickname } = req.body;
     try {
-      const token = await authService.loginUser(nickname);
-      if (!token) {
+      const user = await authService.loginUser(nickname);
+      if (!user) {
         res.status(401).json({
           error: "Failed to login",
         });
       }
-      res.status(200).json({ token });
+      const { token, userId } = user;
+      res.status(200).json({ token, userId });
     } catch (error) {
       logger.error("Error during user login", error);
       res.status(500).json({ error: "Internal server error during user login." });
