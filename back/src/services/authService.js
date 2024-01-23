@@ -49,7 +49,7 @@ class AuthService {
     }
   }
 
-  async register(email, password, nickname) {
+  async createUser(email, password, nickname) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       return await prisma.users.create({
@@ -78,16 +78,14 @@ class AuthService {
     }
   }
 
-  async createUser(email) {
-    //localStrategy 에서 검증함
-    //다른 예외 처리 필요
+  async loginUser(nickname) {
     try {
       const user = await prisma.users.findUnique({
-        where: { email },
+        where: { nickname },
       });
 
       const token = this.generateJwtToken(user);
-      return { user, token }; //토큰은 개발상 편의 위해 return
+      return { token }; //토큰은 개발상 편의 위해 return
     } catch (error) {
       throw error;
     }
@@ -115,27 +113,32 @@ class AuthService {
     }
   }
 
-  async sendNicknameEmail(email) {
+  async getUserByEmail(email) {
     try {
       const user = await prisma.users.findUnique({
         where: { email },
       });
-
-      // 해당 이메일 유저가 없을 때
       if (!user) {
         return false;
       }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async sendNicknameEmail(user) {
+    try {
+      const { email, nickname } = user;
       const subject = "[ACT]닉네임 안내";
-      const text = `고객님의 닉네임은 ${user.nickname} 입니다.`;
+      const text = `고객님의 닉네임은 ${nickname} 입니다.`;
 
-      //메일 보내기
       await emailService.sendEmail(email, subject, text);
-
       return user.nickname;
     } catch (error) {
       throw error;
     }
   }
+
   async getUserByNickname(nickname) {
     try {
       const user = await prisma.users.findUnique({

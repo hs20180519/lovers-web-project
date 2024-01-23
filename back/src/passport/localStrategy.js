@@ -5,15 +5,15 @@ const bcrypt = require("bcrypt");
 const logger = require("../config/logger");
 
 //사용자의 식별을 이메일로
-const localOptions = { usernameField: "email", passwordField: "password" };
+const localOptions = { usernameField: "nickname", passwordField: "password" };
 
-const localStrategy = new LocalStrategy(localOptions, async (email, password, done) => {
+const localStrategy = new LocalStrategy(localOptions, async (nickname, password, done) => {
   try {
     const user = await prisma.users.findUnique({
-      where: { email },
+      where: { nickname },
     });
     if (!user) {
-      return done(null, false, { message: "Incorrect email" });
+      return done(null, false, { message: "Incorrect nickname" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {

@@ -1,7 +1,6 @@
 var createError = require("http-errors");
 const express = require("express");
 var path = require("path");
-var adaro = require("adaro");
 var cookieParser = require("cookie-parser");
 const morganMiddleware = require("./src/middlewares/morganMiddleware");
 const dotenv = require("dotenv");
@@ -17,9 +16,7 @@ const usersRouter = require("./src/routes/users");
 const app = express();
 
 // view engine setup
-app.engine("dust", adaro.dust());
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "dust");
 
 app.use(morganMiddleware);
 app.use(express.json());
