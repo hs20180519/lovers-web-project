@@ -85,7 +85,7 @@ class AuthService {
       });
 
       const token = this.generateJwtToken(user);
-      return { user, token }; //토큰은 개발상 편의 위해 return
+      return { token }; //토큰은 개발상 편의 위해 return
     } catch (error) {
       throw error;
     }
