@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const authRouter = require("./src/routes/authRouter");
 const loverRouter = require("./src/routes/loverRouter");
 const accountbookRouter = require("./src/routes/accountbookRouter");
+const diaryRouter = require("./src/routes/diaryRouter");
 
 dotenv.config(); //.env 파일의 환경 변수 로드
 
@@ -29,6 +30,7 @@ app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/lover", loverRouter);
 app.use("/accountbook", accountbookRouter);
+app.use("/diary", diaryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -36,7 +38,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
