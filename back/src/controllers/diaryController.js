@@ -14,10 +14,42 @@ class diaryController {
           error: "Error creating post",
         });
       }
-      return res.status(201).json({ post });
+      res.status(201).json({ post });
     } catch (error) {
       logger.error("Error during createPost", error);
       res.status(500).json({ error: "Internal server error during post creation." });
+    }
+  }
+
+  async updatePost(req, res) {
+    const { title, content } = req.body;
+    const diaryPostId = req.body.diary_post_id;
+    try {
+      const post = await diaryService.updatePost(title, content, diaryPostId);
+      if (!post) {
+        res.status(500).json({
+          error: "Error updating post",
+        });
+      }
+      res.status(200).json({ post });
+    } catch (error) {
+      logger.error("Error during updatePost", error);
+      res.status(500).json({ error: "Internal server error during post update." });
+    }
+  }
+  async deletePost(req, res) {
+    const diaryPostId = req.body.diary_post_id;
+    try {
+      const post = await diaryService.deletePost(diaryPostId);
+      if (!post) {
+        res.status(500).json({
+          error: "Error deleting post",
+        });
+      }
+      res.status(204).send();
+    } catch (error) {
+      logger.error("Error during deletePost", error);
+      res.status(500).json({ error: "Internal server error during post delete." });
     }
   }
 }
