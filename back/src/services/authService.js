@@ -49,7 +49,7 @@ class AuthService {
     }
   }
 
-  async register(email, password, nickname) {
+  async createUser(email, password, nickname) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       return await prisma.users.create({
@@ -78,12 +78,10 @@ class AuthService {
     }
   }
 
-  async createUser(email) {
-    //localStrategy 에서 검증함
-    //다른 예외 처리 필요
+  async loginUser(nickname) {
     try {
       const user = await prisma.users.findUnique({
-        where: { email },
+        where: { nickname },
       });
 
       const token = this.generateJwtToken(user);

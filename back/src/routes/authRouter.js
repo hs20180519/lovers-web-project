@@ -7,8 +7,8 @@ const authRouter = express.Router();
 
 authRouter.post("/send-email", authController.sendVerificationEmail);
 authRouter.post("/verify-code", authController.confirmEmailCode);
-authRouter.post("/register", authController.registerUser);
-authRouter.post("/login", authenticateLocal, authController.createUser);
+authRouter.post("/register", authController.createUser);
+authRouter.post("/login", authenticateLocal, authController.loginUser);
 
 authRouter.delete("/:userId", authenticateJwt, authController.deleteUser);
 

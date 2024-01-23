@@ -37,11 +37,11 @@ class AuthController {
     }
   }
 
-  async registerUser(req, res) {
+  async createUser(req, res) {
     const { email, password, nickname } = req.body;
 
     try {
-      const user = await authService.register(email, password, nickname);
+      const user = await authService.createUser(email, password, nickname);
       if (!user) {
         res.status(500).json({
           error: "회원가입에 실패했습니다.",
@@ -57,14 +57,14 @@ class AuthController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error("Error during register", error);
+      logger.error("Error during createUser", error);
     }
   }
 
-  async createUser(req, res) {
-    const { email } = req.body;
+  async loginUser(req, res) {
+    const { nickname } = req.body;
     try {
-      const user = await authService.createUser(email);
+      const user = await authService.loginUser(nickname);
       if (user) {
         res.status(200).json({ user });
       } else {
