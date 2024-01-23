@@ -83,9 +83,9 @@ class AuthService {
       const user = await prisma.users.findUnique({
         where: { nickname },
       });
-
+      const userId = user.user_id;
       const token = this.generateJwtToken(user);
-      return { token }; //토큰은 개발상 편의 위해 return
+      return { userId, token }; //토큰은 개발상 편의 위해 return
     } catch (error) {
       throw error;
     }
