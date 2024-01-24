@@ -34,7 +34,7 @@ class diaryController {
     }
   }
   async deletePost(req, res) {
-    const diaryPostId = req.body.diary_post_id;
+    const diaryPostId = parseInt(req.params.id);
     try {
       const post = await diaryService.deletePost(diaryPostId);
       if (!post) {
