@@ -8,11 +8,11 @@ const authRouter = require("./src/routes/authRouter");
 const loverRouter = require("./src/routes/loverRouter");
 const accountBookRouter = require("./src/routes/accountBookRouter");
 const diaryRouter = require("./src/routes/diaryRouter");
+const userRouter = require("./src/routes/userRouter");
 
 dotenv.config(); //.env 파일의 환경 변수 로드
 
 const indexRouter = require("./src/routes");
-const usersRouter = require("./src/routes/users");
 
 const app = express();
 
@@ -26,12 +26,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/lover", loverRouter);
 app.use("/accountbook", accountBookRouter);
 app.use("/diary", diaryRouter);
-
+app.use("/account", userRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
