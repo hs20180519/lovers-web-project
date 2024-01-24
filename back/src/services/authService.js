@@ -94,7 +94,7 @@ class AuthService {
         email: user.email,
       },
       process.env.MY_SECRET_KEY,
-      { expiresIn: "1h" },
+      { expiresIn: "24h" },
     );
   }
 
