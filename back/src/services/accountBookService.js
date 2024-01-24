@@ -35,10 +35,10 @@ class AccountBookService {
       const accountBookPost = await prisma.account_book_posts.findMany({
         where: {
           lover_id: loverId,
-          AND: [
-            { use_date: { gte: new Date(`${year}-${month}-01`) } },
-            { use_date: { lt: new Date(`${year}-${month + 1}-01`) } },
-          ],
+          use_date: {
+            gte: new Date(year, month - 1, 1),
+            lt: new Date(year, month, 1),
+          },
         },
       });
       if (!accountBookPost) {
