@@ -23,9 +23,9 @@ class AccountBookController {
   }
 
   async deleteAccountBook(req, res) {
-    const { accountBookPostId } = req.body;
+    const { accountBookPostId } = req.params;
     try {
-      const result = await accountBookService.deleteAccountBook(accountBookPostId);
+      const result = await accountBookService.deleteAccountBook(Number(accountBookPostId));
       if (!result) {
         res.status(401).json({
           error: "Invalid accountBookPostId",
