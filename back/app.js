@@ -6,7 +6,7 @@ const morganMiddleware = require("./src/middlewares/morganMiddleware");
 const dotenv = require("dotenv");
 const authRouter = require("./src/routes/authRouter");
 const loverRouter = require("./src/routes/loverRouter");
-const accountbookRouter = require("./src/routes/accountbookRouter");
+const accountBookRouter = require("./src/routes/accountBookRouter");
 const diaryRouter = require("./src/routes/diaryRouter");
 
 dotenv.config(); //.env 파일의 환경 변수 로드
@@ -29,7 +29,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/lover", loverRouter);
-app.use("/accountbook", accountbookRouter);
+app.use("/accountbook", accountBookRouter);
 app.use("/diary", diaryRouter);
 
 // catch 404 and forward to error handler
