@@ -11,3 +11,4 @@ back/node_modules/
 back/src/logs/
 
 back/.env
+back/uploads
