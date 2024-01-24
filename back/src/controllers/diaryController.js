@@ -3,10 +3,7 @@ const logger = require("../config/logger");
 
 class diaryController {
   async createPost(req, res) {
-    const { title, content } = req.body;
-    const loverId = req.body.lover_id;
-    const userId = req.body.user_id;
-
+    const { title, content, loverId, userId } = req.body;
     try {
       const post = await diaryService.createPost(title, content, loverId, userId);
       if (!post) {
@@ -22,8 +19,7 @@ class diaryController {
   }
 
   async updatePost(req, res) {
-    const { title, content } = req.body;
-    const diaryPostId = req.body.diary_post_id;
+    const { title, content, diaryPostId } = req.body;
     try {
       const post = await diaryService.updatePost(title, content, diaryPostId);
       if (!post) {
