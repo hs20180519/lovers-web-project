@@ -3,18 +3,18 @@ const logger = require("../config/logger");
 
 class AccountBookController {
   async uploadAccountBook(req, res) {
-    const { lover_id, user_id, category, amount, use_date, content } = req.body;
+    const { loverId, userId, category, amount, useDate, content } = req.body;
     try {
       const user = await accountBookService.uploadAccountBook(
-        lover_id,
-        user_id,
+        loverId,
+        userId,
         category,
         amount,
-        use_date,
+        useDate,
         content,
       );
       if (!user) {
-        res.status(500).json({ error: "Error during uploading accountbook" });
+        res.status(500).json({ error: "Error during uploading accountBook" });
       }
       res.status(201).json({ user });
     } catch (error) {
@@ -23,12 +23,12 @@ class AccountBookController {
   }
 
   async deleteAccountBook(req, res) {
-    const accountBookPostId = req.body.account_book_post_id;
+    const { accountBookPostId } = req.body;
     try {
       const result = await accountBookService.deleteAccountBook(accountBookPostId);
       if (!result) {
         res.status(401).json({
-          error: "Invalid account_book_post_id",
+          error: "Invalid accountBookPostId",
         });
       }
       res.status(204).send();
@@ -38,9 +38,9 @@ class AccountBookController {
   }
 
   async getAccountBook(req, res) {
-    const { lover_id, year, month } = req.body;
+    const { loverId, year, month } = req.body;
     try {
-      const accountBookPost = await accountBookService.getAccountBook(lover_id, year, month);
+      const accountBookPost = await accountBookService.getAccountBook(loverId, year, month);
 
       res.status(201).json(accountBookPost);
     } catch (error) {

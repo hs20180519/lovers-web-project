@@ -2,15 +2,15 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 class AccountBookService {
-  async uploadAccountBook(lover_id, user_id, category, amount, use_date, content) {
+  async uploadAccountBook(loverId, userId, category, amount, useDate, content) {
     try {
       return await prisma.account_book_posts.create({
         data: {
-          lover_id,
-          user_id,
+          lover_id: loverId,
+          user_id: userId,
           category,
           amount,
-          use_date,
+          use_date: useDate,
           content,
         },
       });
@@ -30,11 +30,11 @@ class AccountBookService {
     }
   }
 
-  async getAccountBook(lover_id, year, month) {
+  async getAccountBook(loverId, year, month) {
     try {
       const accountBookPost = await prisma.account_book_posts.findMany({
         where: {
-          lover_id,
+          lover_id: loverId,
           AND: [
             { use_date: { gte: new Date(`${year}-${month}-01`) } },
             { use_date: { lt: new Date(`${year}-${month + 1}-01`) } },

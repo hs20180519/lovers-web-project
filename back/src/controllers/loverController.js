@@ -3,10 +3,10 @@ const logger = require("../config/logger");
 
 class LoverController {
   async makeLoverId(req, res) {
-    const { user_a_id, user_b_id } = req.body;
+    const { userAId, userBId } = req.body;
 
     try {
-      const user = await loverService.makeLoverId(user_a_id, user_b_id);
+      const user = await loverService.makeLoverId(userAId, userBId);
       if (!user) {
         res.status(500).json({
           error: "Error during making lover",
