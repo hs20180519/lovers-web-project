@@ -1,8 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-class AccountbookService {
-  async uploadAccountbook(lover_id, user_id, category, amount, use_date, content) {
+class AccountBookService {
+  async uploadAccountBook(lover_id, user_id, category, amount, use_date, content) {
     try {
       return await prisma.account_book_posts.create({
         data: {
@@ -19,10 +19,10 @@ class AccountbookService {
     }
   }
 
-  async deleteAccountbook(accountbookPostId) {
+  async deleteAccountBook(accountBookPostId) {
     try {
       await prisma.account_book_posts.delete({
-        where: { account_book_post_id: accountbookPostId },
+        where: { account_book_post_id: accountBookPostId },
       });
       return true;
     } catch (error) {
@@ -30,9 +30,9 @@ class AccountbookService {
     }
   }
 
-  async getAccountbook(lover_id, year, month) {
+  async getAccountBook(lover_id, year, month) {
     try {
-      const accountbookPost = await prisma.account_book_posts.findMany({
+      const accountBookPost = await prisma.account_book_posts.findMany({
         where: {
           lover_id,
           AND: [
@@ -41,15 +41,15 @@ class AccountbookService {
           ],
         },
       });
-      if (!accountbookPost) {
+      if (!accountBookPost) {
         return false;
       }
 
-      return accountbookPost;
+      return accountBookPost;
     } catch (error) {
       throw error;
     }
   }
 }
 
-module.exports = new AccountbookService();
+module.exports = new AccountBookService();

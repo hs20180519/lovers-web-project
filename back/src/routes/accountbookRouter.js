@@ -1,11 +1,11 @@
 const express = require("express");
-const accountbookController = require("../controllers/accountbookController");
+const accountBookController = require("../controllers/accountBookController");
 const { authenticateJwt } = require("../middlewares/passportJwt");
 
-const accountbookRouter = express.Router();
+const accountBookRouter = express.Router();
 
-accountbookRouter.post("/posts", accountbookController.uploadAccountbook);
-accountbookRouter.delete("/posts", accountbookController.deleteAccountbook);
-accountbookRouter.get("/posts", accountbookController.getAccountbook);
+accountBookRouter.post("/posts", accountBookController.uploadAccountBook);
+accountBookRouter.delete("/posts", accountBookController.deleteAccountBook);
+accountBookRouter.get("/posts", accountBookController.getAccountBook);
 
-module.exports = accountbookRouter;
+module.exports = accountBookRouter;

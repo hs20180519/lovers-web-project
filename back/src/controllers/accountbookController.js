@@ -1,11 +1,11 @@
-const accountbookService = require("../services/accountbookService");
+const accountBookService = require("../services/accountBookService");
 const logger = require("../config/logger");
 
-class AccountbookController {
-  async uploadAccountbook(req, res) {
+class AccountBookController {
+  async uploadAccountBook(req, res) {
     const { lover_id, user_id, category, amount, use_date, content } = req.body;
     try {
-      const user = await accountbookService.uploadAccountbook(
+      const user = await accountBookService.uploadAccountBook(
         lover_id,
         user_id,
         category,
@@ -18,14 +18,14 @@ class AccountbookController {
       }
       res.status(201).json({ user });
     } catch (error) {
-      logger.error("Error during uploadAccountbook", error);
+      logger.error("Error during uploadAccountBook", error);
     }
   }
 
-  async deleteAccountbook(req, res) {
-    const accountbookPostId = req.body.account_book_post_id;
+  async deleteAccountBook(req, res) {
+    const accountBookPostId = req.body.account_book_post_id;
     try {
-      const result = await accountbookService.deleteAccountbook(accountbookPostId);
+      const result = await accountBookService.deleteAccountBook(accountBookPostId);
       if (!result) {
         res.status(401).json({
           error: "Invalid account_book_post_id",
@@ -33,20 +33,20 @@ class AccountbookController {
       }
       res.status(204).send();
     } catch (error) {
-      logger.error("Error during deleteAccountbook", error);
+      logger.error("Error during deleteAccountBook", error);
     }
   }
 
-  async getAccountbook(req, res) {
+  async getAccountBook(req, res) {
     const { lover_id, year, month } = req.body;
     try {
-      const accountbookPost = await accountbookService.getAccountbook(lover_id, year, month);
+      const accountBookPost = await accountBookService.getAccountBook(lover_id, year, month);
 
-      res.status(201).json(accountbookPost);
+      res.status(201).json(accountBookPost);
     } catch (error) {
-      logger.error("Error during getAccountbook", error);
+      logger.error("Error during getAccountBook", error);
     }
   }
 }
 
-module.exports = new AccountbookController();
+module.exports = new AccountBookController();
