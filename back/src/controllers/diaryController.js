@@ -34,7 +34,7 @@ class diaryController {
     }
   }
   async deletePost(req, res) {
-    const diaryPostId = parseInt(req.params.id);
+    const { diaryPostId } = parseInt(req.params);
     try {
       const post = await diaryService.deletePost(diaryPostId);
       if (!post) {
@@ -46,6 +46,32 @@ class diaryController {
     } catch (error) {
       logger.error("Error during deletePost", error);
       res.status(500).json({ error: "Internal server error during post delete." });
+    }
+  }
+  async getPosts(req, res) {
+    const loverId = parseInt(req.query.lover_id);
+    const diaryPostId = parseInt(req.query.diary_post_id);
+    try {
+      if (diaryPostId) {
+        const post = await diaryService.getPostByPostId(diaryPostId);
+        if (!post) {
+          res.status(500).json({
+            error: "Error getting post",
+          });
+        }
+        res.status(200).json({ post });
+      } else if (loverId) {
+        const posts = await diaryService.getPostsByLoverId(loverId);
+        if (!posts) {
+          res.status(500).json({
+            error: "Error getting all posts",
+          });
+        }
+        res.status(200).json({ posts });
+      }
+    } catch (error) {
+      logger.error("Error during getPosts", error);
+      res.status(500).json({ error: "Internal server error during posts get." });
     }
   }
 }
