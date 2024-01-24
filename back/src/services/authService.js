@@ -66,13 +66,9 @@ class AuthService {
 
   async deleteVerificationCode(email) {
     try {
-      const user = await prisma.verifications.deleteMany({
+      return await prisma.verifications.deleteMany({
         where: { email },
       });
-      if (!user) {
-        return null;
-      }
-      return user;
     } catch (error) {
       throw error;
     }
@@ -104,10 +100,9 @@ class AuthService {
 
   async deleteUser(userId) {
     try {
-      await prisma.users.delete({
+      return await prisma.users.delete({
         where: { user_id: userId },
       });
-      return true; // 성공적으로 삭제
     } catch (error) {
       throw error;
     }
@@ -115,13 +110,9 @@ class AuthService {
 
   async getUserByEmail(email) {
     try {
-      const user = await prisma.users.findUnique({
+      return await prisma.users.findUnique({
         where: { email },
       });
-      if (!user) {
-        return false;
-      }
-      return user;
     } catch (error) {
       throw error;
     }
@@ -141,13 +132,9 @@ class AuthService {
 
   async getUserByNickname(nickname) {
     try {
-      const user = await prisma.users.findUnique({
+      return await prisma.users.findUnique({
         where: { nickname },
       });
-      if (!user) {
-        return false;
-      }
-      return user;
     } catch (error) {
       throw error;
     }
@@ -159,9 +146,10 @@ class AuthService {
       const subject = "[ACT]임시 비밀번호 안내";
       const text = `고객님의 임시 비밀번호는 ${temporaryPassword} 입니다.`;
 
-      //메일 보내기
+      //메일 발송
       await emailService.sendEmail(email, subject, text);
 
+      //비밀번호 변경
       const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
       return await prisma.users.update({
         where: { email },

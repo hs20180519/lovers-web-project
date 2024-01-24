@@ -15,8 +15,8 @@ model account_book_posts {
   use_date             DateTime @db.DateTime(0)
   user_id              Int
   content              String?  @db.VarChar(45)
-  lovers               lovers   @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-account_books_posts-lovers")
-  users                users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-payments-users")
+  lovers               lovers   @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-account_books_posts-lovers")
+  users                users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-payments-users")
 
   @@index([lover_id], map: "fk-account_books_posts-lovers_idx")
   @@index([user_id], map: "fk-payments-users_idx")
@@ -27,8 +27,7 @@ model comments {
   diary_post_id Int
   content       String      @db.VarChar(127)
   create_date   DateTime    @db.DateTime(0)
-  diary_posts   diary_posts @relation(fields: [diary_post_id], references: [diary_post_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-comments-posts")
-
+  diary_posts   diary_posts @relation(fields: [diary_post_id], references: [diary_post_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-comments-posts")
   @@index([diary_post_id], map: "fk_comments_post_id_idx")
 }
 
@@ -42,8 +41,8 @@ model diary_posts {
   post_date         DateTime   @db.DateTime(0)
   user_id           Int
   comments          comments[]
-  lovers            lovers     @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-posts-lovers")
-  users             users      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-posts-users")
+  lovers            lovers     @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-posts-lovers")
+  users             users      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-posts-users")
 
   @@index([lover_id], map: "fk-posts-lovers_idx")
   @@index([user_id], map: "fk_posts_author_idx")
@@ -54,7 +53,7 @@ model gallery_posts {
   lover_id        Int
   image           String @db.VarChar(255)
   liked_count     Int?
-  lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-gallerys-lovers")
+  lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-gallerys-lovers")
 
   @@index([lover_id], map: "fk-gallerys-lovers_idx")
 }
@@ -66,8 +65,8 @@ model lovers {
   account_book_posts            account_book_posts[]
   diary_posts                   diary_posts[]
   gallery_posts                 gallery_posts[]
-  users_lovers_user_a_idTousers users                @relation("lovers_user_a_idTousers", fields: [user_a_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-lovers-users-user_a_id")
-  users_lovers_user_b_idTousers users                @relation("lovers_user_b_idTousers", fields: [user_b_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk-lovers-users-user_b_id")
+  users_lovers_user_a_idTousers users                @relation("lovers_user_a_idTousers", fields: [user_a_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-lovers-users-user_a_id")
+  users_lovers_user_b_idTousers users                @relation("lovers_user_b_idTousers", fields: [user_b_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-lovers-users-user_b_id")
 }
 
 model verifications {
