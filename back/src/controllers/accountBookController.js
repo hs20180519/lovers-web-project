@@ -22,10 +22,10 @@ class AccountBookController {
     }
   }
 
-  async deleteAccountBook(req, res) {
+  async deleteAccountBookById(req, res) {
     const { accountBookPostId } = req.params;
     try {
-      const result = await accountBookService.deleteAccountBook(Number(accountBookPostId));
+      const result = await accountBookService.deleteAccountBookById(Number(accountBookPostId));
       if (!result) {
         res.status(401).json({
           error: "Invalid accountBookPostId",
@@ -37,10 +37,10 @@ class AccountBookController {
     }
   }
 
-  async getAccountBook(req, res) {
+  async getAccountBookByDate(req, res) {
     const { loverId, year, month } = req.body;
     try {
-      const accountBookPost = await accountBookService.getAccountBook(loverId, year, month);
+      const accountBookPost = await accountBookService.getAccountBookByDate(loverId, year, month);
 
       res.status(201).json(accountBookPost);
     } catch (error) {

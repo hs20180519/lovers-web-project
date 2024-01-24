@@ -19,7 +19,7 @@ class AccountBookService {
     }
   }
 
-  async deleteAccountBook(accountBookPostId) {
+  async deleteAccountBookById(accountBookPostId) {
     try {
       await prisma.account_book_posts.delete({
         where: { account_book_post_id: accountBookPostId },
@@ -30,7 +30,7 @@ class AccountBookService {
     }
   }
 
-  async getAccountBook(loverId, year, month) {
+  async getAccountBookByDate(loverId, year, month) {
     try {
       const accountBookPost = await prisma.account_book_posts.findMany({
         where: {
