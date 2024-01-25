@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 class AccountBookService {
-  async uploadAccountBook(loverId, userId, category, amount, useDate, content) {
+  async createAccountBook(loverId, userId, category, amount, useDate, content) {
     try {
       return await prisma.account_book_posts.create({
         data: {

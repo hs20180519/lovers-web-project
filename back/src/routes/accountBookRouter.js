@@ -4,7 +4,7 @@ const { authenticateJwt } = require("../middlewares/passportJwt");
 
 const accountBookRouter = express.Router();
 
-accountBookRouter.post("/posts", accountBookController.uploadAccountBook);
+accountBookRouter.post("/posts", accountBookController.createAccountBook);
 accountBookRouter.delete("/posts/:accountBookPostId", accountBookController.deleteAccountBookById);
 accountBookRouter.get("/posts", accountBookController.getAccountBookByDate);
 

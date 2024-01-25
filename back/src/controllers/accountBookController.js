@@ -2,10 +2,10 @@ const accountBookService = require("../services/accountBookService");
 const logger = require("../config/logger");
 
 class AccountBookController {
-  async uploadAccountBook(req, res) {
+  async createAccountBook(req, res) {
     const { loverId, userId, category, amount, useDate, content } = req.body;
     try {
-      const user = await accountBookService.uploadAccountBook(
+      const user = await accountBookService.createAccountBook(
         loverId,
         userId,
         category,
@@ -14,11 +14,11 @@ class AccountBookController {
         content,
       );
       if (!user) {
-        res.status(500).json({ error: "Error during uploading accountBook" });
+        res.status(500).json({ error: "Error during creating accountBook" });
       }
-      res.status(201).json({ user });
+      res.status(200).json({ user });
     } catch (error) {
-      logger.error("Error during uploadAccountBook", error);
+      logger.error("Error during creatAccountBook", error);
     }
   }
 
