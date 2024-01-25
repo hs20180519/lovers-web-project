@@ -30,6 +30,16 @@ class CommentService {
       throw error;
     }
   }
+
+  async deleteComment(commentId) {
+    try {
+      return await prisma.comments.delete({
+        where: { comment_id: commentId },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new CommentService();
