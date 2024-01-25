@@ -31,7 +31,7 @@ class AccountBookService {
 
   async getAccountBookByDate(loverId, year, month) {
     try {
-      const accountBookPosts = await prisma.account_book_posts.findMany({
+      return await prisma.account_book_posts.findMany({
         where: {
           lover_id: loverId,
           use_date: {
@@ -41,7 +41,6 @@ class AccountBookService {
           },
         },
       });
-      return accountBookPosts;
     } catch (error) {
       throw error;
     }
