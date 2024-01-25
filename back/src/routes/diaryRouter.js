@@ -7,6 +7,6 @@ const diaryRouter = express.Router();
 diaryRouter.post("/posts", authenticateJwt, diaryController.createPost);
 diaryRouter.patch("/posts", authenticateJwt, diaryController.updatePost);
 diaryRouter.delete("/posts/:diary_post_id", authenticateJwt, diaryController.deletePost);
-diaryRouter.get("/posts", authenticateJwt, diaryController.getPosts);
+diaryRouter.get("/posts/:lover_id", authenticateJwt, diaryController.getMonthlyPosts);
 
 module.exports = diaryRouter;

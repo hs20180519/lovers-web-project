@@ -1,11 +1,16 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class DiaryService {
-  async getPostsByLoverId(loverId) {
+  //월별 조회
+  async getMonthlyPosts(loverId, year, month) {
     try {
       return await prisma.diary_posts.findMany({
         where: {
           lover_id: loverId,
+          post_date: {
+            gte: new Date(year, month - 1, 1),
+            lt: new Date(year, month, 1),
+          },
         },
       });
     } catch (error) {
@@ -24,14 +29,14 @@ class DiaryService {
       throw error;
     }
   }
-  async createPost(title, content, loverId, userId) {
+  async createPost(title, content, loverId, userId, postDate) {
     try {
       return await prisma.diary_posts.create({
         data: {
           title,
           content,
           lover_id: loverId,
-          post_date: new Date(),
+          post_date: postDate,
           user_id: userId,
         },
       });
