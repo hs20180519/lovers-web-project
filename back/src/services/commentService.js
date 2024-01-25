@@ -13,7 +13,7 @@ class CommentService {
   }
   async getComments(diaryPostId) {
     try {
-      return await prisma.diary_posts.findUnique({
+      return await prisma.comments.findMany({
         where: { diary_post_id: diaryPostId },
       });
     } catch (error) {
