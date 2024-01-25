@@ -21,10 +21,9 @@ class AccountBookService {
 
   async deleteAccountBookById(accountBookPostId) {
     try {
-      await prisma.account_book_posts.delete({
+      return await prisma.account_book_posts.delete({
         where: { account_book_post_id: accountBookPostId },
       });
-      return true;
     } catch (error) {
       throw error;
     }
@@ -41,10 +40,6 @@ class AccountBookService {
           },
         },
       });
-      if (!accountBookPosts) {
-        return false;
-      }
-
       return accountBookPosts;
     } catch (error) {
       throw error;
