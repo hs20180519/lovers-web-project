@@ -4,9 +4,9 @@ const { extname } = require("path");
 const multer = require("multer");
 const { diskStorage } = require("multer");
 
-class userController {
+class UserController {
   async getUserProfile(req, res) {
-    const userId = parseInt(req.params.userId);
+    const userId = parseInt(req.params.user_id);
     try {
       const user = await userService.getUserProfile(userId);
       if (!user) {
@@ -24,7 +24,7 @@ class userController {
 
   async uploadProfileImage(req, res) {
     try {
-      const userId = parseInt(req.params.userId);
+      const userId = parseInt(req.params.user_id);
 
       const storage = diskStorage({
         destination: "uploads/", //이미지 저장될 폴더
@@ -52,4 +52,4 @@ class userController {
     }
   }
 }
-module.exports = new userController();
+module.exports = new UserController();

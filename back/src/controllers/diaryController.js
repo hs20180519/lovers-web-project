@@ -1,7 +1,7 @@
 const diaryService = require("../services/diaryService");
 const logger = require("../config/logger");
 
-class diaryController {
+class DiaryController {
   async createPost(req, res) {
     const { title, content, loverId, userId } = req.body;
     try {
@@ -34,7 +34,7 @@ class diaryController {
     }
   }
   async deletePost(req, res) {
-    const diaryPostId = parseInt(req.params.diaryPostId);
+    const diaryPostId = parseInt(req.params.diary_post_id);
     try {
       const post = await diaryService.deletePost(diaryPostId);
       if (!post) {
@@ -75,4 +75,4 @@ class diaryController {
     }
   }
 }
-module.exports = new diaryController();
+module.exports = new DiaryController();

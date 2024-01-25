@@ -9,6 +9,7 @@ const loverRouter = require("./src/routes/loverRouter");
 const accountBookRouter = require("./src/routes/accountBookRouter");
 const diaryRouter = require("./src/routes/diaryRouter");
 const userRouter = require("./src/routes/userRouter");
+const commentRouter = require("./src/routes/commentRouter");
 
 dotenv.config(); //.env 파일의 환경 변수 로드
 
@@ -30,6 +31,7 @@ app.use("/auth", authRouter);
 app.use("/lover", loverRouter);
 app.use("/accountbook", accountBookRouter);
 app.use("/diary", diaryRouter);
+app.use("/diary", commentRouter);
 app.use("/account", userRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
