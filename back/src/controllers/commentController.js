@@ -19,7 +19,7 @@ class CommentController {
   }
 
   async getComments(req, res) {
-    const diaryPostId = parseInt(req.params.diaryPostId);
+    const diaryPostId = parseInt(req.params.diary_post_id);
     try {
       const comments = await commentService.getComments(diaryPostId);
       if (!comments) {
@@ -51,7 +51,7 @@ class CommentController {
     }
   }
   async deleteComment(req, res) {
-    const commentId = parseInt(req.params.commentId);
+    const commentId = parseInt(req.params.comment_id);
     try {
       const result = await commentService.deleteComment(commentId);
       if (!result) {
