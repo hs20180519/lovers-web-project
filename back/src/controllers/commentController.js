@@ -5,7 +5,7 @@ class CommentController {
   async createComment(req, res) {
     const { postDiaryId, content } = req.body;
     try {
-      const comment = await commentService.createComments(postDiaryId, content);
+      const comment = await commentService.createComment(postDiaryId, content);
       if (!comment) {
         res.status(500).json({
           error: "Error creating comments",

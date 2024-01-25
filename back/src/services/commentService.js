@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class CommentService {
-  async createComments(diaryPostId, content) {
+  async createComment(diaryPostId, content) {
     console.log(diaryPostId, content);
     try {
       return await prisma.comments.create({
