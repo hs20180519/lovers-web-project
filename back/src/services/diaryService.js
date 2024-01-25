@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-class diaryService {
+class DiaryService {
   async getPostsByLoverId(loverId) {
     try {
       return await prisma.diary_posts.findMany({
@@ -69,4 +69,4 @@ class diaryService {
     }
   }
 }
-module.exports = new diaryService();
+module.exports = new DiaryService();

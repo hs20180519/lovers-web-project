@@ -1,7 +1,7 @@
 const diaryService = require("../services/diaryService");
 const logger = require("../config/logger");
 
-class diaryController {
+class DiaryController {
   async createPost(req, res) {
     const { title, content, loverId, userId } = req.body;
     try {
@@ -75,4 +75,4 @@ class diaryController {
     }
   }
 }
-module.exports = new diaryController();
+module.exports = new DiaryController();

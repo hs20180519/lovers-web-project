@@ -4,7 +4,7 @@ const { extname } = require("path");
 const multer = require("multer");
 const { diskStorage } = require("multer");
 
-class userController {
+class UserController {
   async getUserProfile(req, res) {
     const userId = parseInt(req.params.userId);
     try {
@@ -52,4 +52,4 @@ class userController {
     }
   }
 }
-module.exports = new userController();
+module.exports = new UserController();
