@@ -19,9 +19,9 @@ class DiaryController {
   }
 
   async updateDiaryPost(req, res) {
-    const { title, content, diaryPostId } = req.body;
+    const { title, content, diaryPostId, postDate } = req.body;
     try {
-      const post = await diaryService.updateDiaryPost(title, content, diaryPostId);
+      const post = await diaryService.updateDiaryPost(title, content, diaryPostId, postDate);
       if (!post) {
         res.status(500).json({
           error: "Error updating post",

@@ -34,10 +34,7 @@ class DiaryService {
     }
   }
 
-  async updateDiaryPost(title, content, diaryPostId) {
-    //비워있을 경우 기존의 title, content 유지
-    title = title ?? undefined;
-    content = content ?? undefined;
+  async updateDiaryPost(title, content, diaryPostId, postDate) {
     try {
       return await prisma.diary_posts.update({
         where: {
@@ -46,6 +43,7 @@ class DiaryService {
         data: {
           title,
           content,
+          post_date: postDate,
         },
       });
     } catch (error) {
