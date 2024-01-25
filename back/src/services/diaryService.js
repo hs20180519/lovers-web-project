@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class DiaryService {
   //월별 조회
-  async getMonthlyPosts(loverId, year, month) {
+  async getMonthlyDiaryPosts(loverId, year, month) {
     try {
       return await prisma.diary_posts.findMany({
         where: {
@@ -18,18 +18,7 @@ class DiaryService {
     }
   }
 
-  async getPostByPostId(diaryPostId) {
-    try {
-      return await prisma.diary_posts.findUnique({
-        where: {
-          diary_post_id: diaryPostId,
-        },
-      });
-    } catch (error) {
-      throw error;
-    }
-  }
-  async createPost(title, content, loverId, userId, postDate) {
+  async createDiaryPost(title, content, loverId, userId, postDate) {
     try {
       return await prisma.diary_posts.create({
         data: {
@@ -45,7 +34,7 @@ class DiaryService {
     }
   }
 
-  async updatePost(title, content, diaryPostId) {
+  async updateDiaryPost(title, content, diaryPostId) {
     //비워있을 경우 기존의 title, content 유지
     title = title ?? undefined;
     content = content ?? undefined;
@@ -64,7 +53,7 @@ class DiaryService {
     }
   }
 
-  async deletePost(diaryPostId) {
+  async deleteDiaryPost(diaryPostId) {
     try {
       return await prisma.diary_posts.delete({
         where: { diary_post_id: diaryPostId },
