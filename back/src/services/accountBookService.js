@@ -35,6 +35,7 @@ class AccountBookService {
         where: {
           lover_id: loverId,
           use_date: {
+            // 요청받은 년도, 월의 1일부터 마지막 날까지의 데이터 조회
             gte: new Date(year, month - 1, 1),
             lt: new Date(year, month, 1),
           },
