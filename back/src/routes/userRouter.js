@@ -4,9 +4,9 @@ const { authenticateJwt } = require("../middlewares/passportJwt");
 
 const userRouter = express.Router();
 
-userRouter.get("/users/:userId", authenticateJwt, userController.getUserProfile);
+userRouter.get("/users/:user_id", authenticateJwt, userController.getUserProfile);
 userRouter.post(
-  "/images/:userId/profile-image",
+  "/images/:user_id/profile-image",
   authenticateJwt,
   userController.uploadProfileImage,
 );
