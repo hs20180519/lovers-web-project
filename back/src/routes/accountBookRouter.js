@@ -15,5 +15,6 @@ accountBookRouter.get(
   authenticateJwt,
   accountBookController.getAccountBookByDate,
 );
+accountBookRouter.patch("/posts", authenticateJwt, accountBookController.updateAccountBookPost);
 
 module.exports = accountBookRouter;

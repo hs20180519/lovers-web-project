@@ -45,6 +45,24 @@ class AccountBookService {
       throw error;
     }
   }
+
+  async updateAccountBookPost(accountBookPostId, category, amount, useDate, content) {
+    try {
+      return await prisma.account_book_posts.update({
+        where: {
+          account_book_post_id: accountBookPostId,
+        },
+        data: {
+          category,
+          amount,
+          use_date: useDate,
+          content,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new AccountBookService();

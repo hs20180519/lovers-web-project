@@ -1,5 +1,6 @@
 const accountBookService = require("../services/accountBookService");
 const logger = require("../config/logger");
+const { use } = require("passport");
 
 class AccountBookController {
   async createAccountBook(req, res) {
@@ -52,6 +53,28 @@ class AccountBookController {
       res.status(201).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBook", error);
+    }
+  }
+
+  async updateAccountBookPost(req, res) {
+    const { accountBookPostId, category, amount, useDate, content } = req.body;
+    try {
+      const post = await accountBookService.updateAccountBookPost(
+        accountBookPostId,
+        category,
+        amount,
+        useDate,
+        content,
+      );
+      if (!post) {
+        res.status(500).json({
+          error: "Error during updating accountBookPost",
+        });
+      }
+      res.status(200).json({ post });
+    } catch (error) {
+      logger.errored("Error during updateAccountBookPost", error);
+      res.status(500).json({ error: "Internal server error during accountBookPost update" });
     }
   }
 }
