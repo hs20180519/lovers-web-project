@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 class AccountBookService {
-  async uploadAccountBook(loverId, userId, category, amount, useDate, content) {
+  async createAccountBook(loverId, userId, category, amount, useDate, content) {
     try {
       return await prisma.account_book_posts.create({
         data: {
@@ -21,10 +21,9 @@ class AccountBookService {
 
   async deleteAccountBookById(accountBookPostId) {
     try {
-      await prisma.account_book_posts.delete({
+      return await prisma.account_book_posts.delete({
         where: { account_book_post_id: accountBookPostId },
       });
-      return true;
     } catch (error) {
       throw error;
     }
@@ -32,20 +31,34 @@ class AccountBookService {
 
   async getAccountBookByDate(loverId, year, month) {
     try {
-      const accountBookPost = await prisma.account_book_posts.findMany({
+      return await prisma.account_book_posts.findMany({
         where: {
           lover_id: loverId,
           use_date: {
+            // 요청받은 년도, 월의 1일부터 마지막 날까지의 데이터 조회
             gte: new Date(year, month - 1, 1),
             lt: new Date(year, month, 1),
           },
         },
       });
-      if (!accountBookPost) {
-        return false;
-      }
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      return accountBookPost;
+  async updateAccountBookPost(accountBookPostId, category, amount, useDate, content) {
+    try {
+      return await prisma.account_book_posts.update({
+        where: {
+          account_book_post_id: accountBookPostId,
+        },
+        data: {
+          category,
+          amount,
+          use_date: useDate,
+          content,
+        },
+      });
     } catch (error) {
       throw error;
     }

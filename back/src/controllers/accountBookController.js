@@ -1,11 +1,12 @@
 const accountBookService = require("../services/accountBookService");
 const logger = require("../config/logger");
+const { use } = require("passport");
 
 class AccountBookController {
-  async uploadAccountBook(req, res) {
+  async createAccountBook(req, res) {
     const { loverId, userId, category, amount, useDate, content } = req.body;
     try {
-      const user = await accountBookService.uploadAccountBook(
+      const user = await accountBookService.createAccountBook(
         loverId,
         userId,
         category,
@@ -14,11 +15,11 @@ class AccountBookController {
         content,
       );
       if (!user) {
-        res.status(500).json({ error: "Error during uploading accountBook" });
+        res.status(500).json({ error: "Error during creating accountBook" });
       }
-      res.status(201).json({ user });
+      res.status(200).json({ user });
     } catch (error) {
-      logger.error("Error during uploadAccountBook", error);
+      logger.error("Error during creatAccountBook", error);
     }
   }
 
@@ -38,13 +39,42 @@ class AccountBookController {
   }
 
   async getAccountBookByDate(req, res) {
-    const { loverId, year, month } = req.body;
+    const loverId = req.params.lover_id;
+    const { year, month } = req.query;
     try {
-      const accountBookPost = await accountBookService.getAccountBookByDate(loverId, year, month);
-
-      res.status(201).json(accountBookPost);
+      const accountBookPosts = await accountBookService.getAccountBookByDate(
+        Number(loverId),
+        year,
+        month,
+      );
+      if (!accountBookPosts) {
+        res.status(500).json({ error: "error" });
+      }
+      res.status(201).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBook", error);
+    }
+  }
+
+  async updateAccountBookPost(req, res) {
+    const { accountBookPostId, category, amount, useDate, content } = req.body;
+    try {
+      const post = await accountBookService.updateAccountBookPost(
+        accountBookPostId,
+        category,
+        amount,
+        useDate,
+        content,
+      );
+      if (!post) {
+        res.status(500).json({
+          error: "Error during updating accountBookPost",
+        });
+      }
+      res.status(200).json({ post });
+    } catch (error) {
+      logger.errored("Error during updateAccountBookPost", error);
+      res.status(500).json({ error: "Internal server error during accountBookPost update" });
     }
   }
 }
