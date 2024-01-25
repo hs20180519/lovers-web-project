@@ -40,9 +40,9 @@ class AccountBookController {
   async getAccountBookByDate(req, res) {
     const { loverId, year, month } = req.body;
     try {
-      const accountBookPost = await accountBookService.getAccountBookByDate(loverId, year, month);
+      const accountBookPosts = await accountBookService.getAccountBookByDate(loverId, year, month);
 
-      res.status(201).json(accountBookPost);
+      res.status(201).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBook", error);
     }
