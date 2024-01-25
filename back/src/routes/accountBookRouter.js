@@ -6,6 +6,6 @@ const accountBookRouter = express.Router();
 
 accountBookRouter.post("/posts", accountBookController.createAccountBook);
 accountBookRouter.delete("/posts/:accountBookPostId", accountBookController.deleteAccountBookById);
-accountBookRouter.get("/posts", accountBookController.getAccountBookByDate);
+accountBookRouter.get("/posts/:lover_id", accountBookController.getAccountBookByDate);
 
 module.exports = accountBookRouter;
