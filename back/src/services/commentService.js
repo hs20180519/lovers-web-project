@@ -20,10 +20,10 @@ class CommentService {
       throw error;
     }
   }
-  async updateComment(diaryPostId, commentId, content) {
+  async updateComment(commentId, content) {
     try {
       return await prisma.comments.update({
-        where: { diary_post_id: diaryPostId, comment_id: commentId },
+        where: { comment_id: commentId },
         data: { content },
       });
     } catch (error) {

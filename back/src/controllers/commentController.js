@@ -35,8 +35,8 @@ class CommentController {
   }
 
   async updateComment(req, res) {
-    const { diaryPostId, commentId, content } = req.body;
-    const comment = await commentService.updateComment(diaryPostId, commentId, content);
+    const { commentId, content } = req.body;
+    const comment = await commentService.updateComment(commentId, content);
     try {
       if (!comment) {
         res.status(500).json({
@@ -50,6 +50,9 @@ class CommentController {
       res.status(500).json({ error: "Internal server updating comments" });
     }
   }
+  //async deleteComment(req, res){
+  //  const { commentId }
+  //}
 }
 
 module.exports = new CommentController();
