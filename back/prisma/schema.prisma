@@ -86,3 +86,11 @@ model users {
   lovers_lovers_user_a_idTousers lovers?              @relation("lovers_user_a_idTousers")
   lovers_lovers_user_b_idTousers lovers?              @relation("lovers_user_b_idTousers")
 }
+
+model pairing_requests {
+  pairing_request_id    Int       @id @unique(map: "pairing_request_id_UNIQUE") @default(autoincrement())
+  apply_user_email      String    @unique(map: "apply_user_email_UNIQUE") @db.VarChar(30)
+  accept_user_email     String    @unique(map: "accept_user_email_UNIQUE") @db.VarChar(30)
+  apply                 Int       @db.TinyInt
+  accept                Int       @db.TinyInt
+}

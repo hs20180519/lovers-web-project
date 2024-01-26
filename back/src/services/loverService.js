@@ -14,6 +14,61 @@ class LoverService {
       throw error;
     }
   }
+
+  async getUserIdByEmail(email) {
+    try {
+      const user = await prisma.users.findUnique({
+        where: { email },
+      });
+      return user.user_id;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async applyLoverByEmail(applyUserEmail, acceptUserEmail) {
+    try {
+      return await prisma.pairing_requests.create({
+        data: {
+          apply_user_email: applyUserEmail,
+          accept_user_email: acceptUserEmail,
+          apply: 1,
+          accept: 0,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async accpetLoverByEmail(applyUserEmail, acceptUserEmail) {
+    try {
+      await prisma.pairing_requests.update({
+        where: {
+          apply_user_email: applyUserEmail,
+          accept_user_email: acceptUserEmail,
+        },
+        data: {
+          accept: 1,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deletePairingRequest(applyUserEmail, acceptUserEmail) {
+    try {
+      await prisma.pairing_requests.delete({
+        where: {
+          apply_user_email: applyUserEmail,
+          accept_user_email: acceptUserEmail,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new LoverService();
