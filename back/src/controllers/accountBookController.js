@@ -25,7 +25,7 @@ class AccountBookController {
   async deleteAccountBookById(req, res) {
     const { accountBookPostId } = req.params;
     try {
-      const result = await accountBookService.deleteAccountBookById(Number(accountBookPostId));
+      await accountBookService.deleteAccountBookById(Number(accountBookPostId));
       res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteAccountBook", error);
