@@ -10,9 +10,9 @@ authRouter.post("/verify-code", authController.confirmEmailCode);
 authRouter.post("/register", authController.createUser);
 authRouter.post("/login", authenticateLocal, authController.loginUser);
 
-authRouter.delete("/:userId", authenticateJwt, authController.deleteUser);
+authRouter.delete("/", authenticateJwt, authController.deleteUser);
 
-authRouter.get("/nickname/:email", authController.findUserNickname);
+authRouter.get("/nickname", authController.findUserNickname);
 authRouter.patch("/password", authController.findUserPassword);
 
 module.exports = authRouter;
