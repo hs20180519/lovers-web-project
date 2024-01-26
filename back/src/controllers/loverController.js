@@ -35,7 +35,7 @@ class LoverController {
       const userAId = await loverService.getUserIdByEmail(applyUserEmail);
       const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
       const result = await loverService.makeLoverId(userAId, userBId);
-      res.status(200).json({ result });
+      res.status(201).json({ result });
     } catch (error) {
       logger.error("Error during acceptLoverByEmail", error);
       res.status(500).json({ error: "Internal server error during accepting lover by email" });

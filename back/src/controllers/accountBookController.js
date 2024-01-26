@@ -15,7 +15,7 @@ class AccountBookController {
         useDate,
         content,
       );
-      res.status(200).json({ user });
+      res.status(201).json({ user });
     } catch (error) {
       logger.error("Error during creatAccountBook", error);
     }
