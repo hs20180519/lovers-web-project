@@ -51,7 +51,8 @@ model diary_posts {
 model gallery_posts {
   gallery_post_id Int    @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
   lover_id        Int
-  image           String @db.VarChar(255)
+  imagePath       String @db.VarChar(255)
+  post_date       DateTime   @db.DateTime(0)
   liked_count     Int?
   lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-gallerys-lovers")
 
