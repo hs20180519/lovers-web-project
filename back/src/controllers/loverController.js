@@ -12,7 +12,7 @@ class LoverController {
       res.status(201).json({ result });
     } catch (error) {
       logger.error("Error during makeLoverId", error);
-      res.status(500).json({ error: "Internal server error during making lover" });
+      res.status(500).json({ error: "Internal server error during making loverId" });
     }
   }
 
