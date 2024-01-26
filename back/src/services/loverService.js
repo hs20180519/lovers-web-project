@@ -14,6 +14,16 @@ class LoverService {
       throw error;
     }
   }
+
+  async getUserByEmail(email) {
+    try {
+      return await prisma.users.findUnique({
+        where: { email },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new LoverService();
