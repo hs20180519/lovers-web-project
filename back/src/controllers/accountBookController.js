@@ -40,7 +40,7 @@ class AccountBookController {
         year,
         month,
       );
-      res.status(201).json(accountBookPosts);
+      res.status(200).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBook", error);
     }
