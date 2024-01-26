@@ -22,5 +22,15 @@ class GalleryController {
       res.status(500).json({ error: "Internal server error during photo get" });
     }
   }
+  async deleteGalleryPhoto(req, res) {
+    const galleryPhotoId = parseInt(req.params.gallery_photo_id);
+    try {
+      await galleryService.deleteGalleryPhoto(galleryPhotoId);
+      res.status(204).send();
+    } catch (error) {
+      logger.error("Error during deleteGalleryPhoto", error);
+      res.status(500).json({ error: "Internal server error during photo deleting" });
+    }
+  }
 }
 module.exports = new GalleryController();

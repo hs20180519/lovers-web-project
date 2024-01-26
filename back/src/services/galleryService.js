@@ -3,11 +3,11 @@ const prisma = new PrismaClient();
 class GalleryService {
   async createGalleryPhoto(loverId, imagePath) {
     try {
-      return await prisma.gallery_posts.create({
+      return await prisma.gallery_photos.create({
         data: {
           lover_id: loverId,
           image_path: imagePath,
-          post_date: new Date(),
+          photo_date: new Date(),
         },
       });
     } catch (error) {
@@ -16,9 +16,20 @@ class GalleryService {
   }
   async getAllGalleryPhotos(loverId) {
     try {
-      return await prisma.gallery_posts.findMany({
+      return await prisma.gallery_photos.findMany({
         where: {
           lover_id: loverId,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+  async deleteGalleryPhoto(galleryPhotoId) {
+    try {
+      await prisma.gallery_photos.delete({
+        where: {
+          gallery_photo_id: galleryPhotoId,
         },
       });
     } catch (error) {
