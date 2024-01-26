@@ -41,7 +41,7 @@ class LoverService {
     }
   }
 
-  async accpetLoverByEmail(applyUserEmail, acceptUserEmail) {
+  async acceptLoverByEmail(applyUserEmail, acceptUserEmail) {
     try {
       await prisma.pairing_requests.update({
         where: {

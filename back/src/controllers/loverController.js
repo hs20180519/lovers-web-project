@@ -30,7 +30,7 @@ class LoverController {
     const acceptUserEmail = req.user.email;
     const { applyUserEmail } = req.body;
     try {
-      await loverService.accpetLoverByEmail(applyUserEmail, acceptUserEmail);
+      await loverService.acceptLoverByEmail(applyUserEmail, acceptUserEmail);
       await loverService.deletePairingRequest(applyUserEmail, acceptUserEmail);
       const userAId = await loverService.getUserIdByEmail(applyUserEmail);
       const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
