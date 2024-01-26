@@ -14,5 +14,16 @@ class GalleryService {
       throw error;
     }
   }
+  async getAllGalleryPhotos(loverId) {
+    try {
+      return await prisma.gallery_posts.findMany({
+        where: {
+          lover_id: loverId,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 module.exports = new GalleryService();
