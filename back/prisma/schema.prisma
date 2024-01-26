@@ -48,11 +48,11 @@ model diary_posts {
   @@index([user_id], map: "fk_posts_author_idx")
 }
 
-model gallery_posts {
-  gallery_post_id Int    @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
+model gallery_photos {
+  gallery_photo_id Int    @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
   lover_id        Int
   image_path       String @db.VarChar(255)
-  post_date       DateTime   @db.DateTime(0)
+  photo_date       DateTime   @db.DateTime(0)
   liked_count     Int?
   lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-gallerys-lovers")
 
@@ -65,7 +65,7 @@ model lovers {
   user_b_id                     Int                  @unique(map: "user_b_id_UNIQUE")
   account_book_posts            account_book_posts[]
   diary_posts                   diary_posts[]
-  gallery_posts                 gallery_posts[]
+  gallery_photos                gallery_photos[]
   users_lovers_user_a_idTousers users                @relation("lovers_user_a_idTousers", fields: [user_a_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-lovers-users-user_a_id")
   users_lovers_user_b_idTousers users                @relation("lovers_user_b_idTousers", fields: [user_b_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-lovers-users-user_b_id")
 }
