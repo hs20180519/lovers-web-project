@@ -2,7 +2,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class CommentService {
   async createComment(diaryPostId, content) {
-    console.log(diaryPostId, content);
     try {
       return await prisma.comments.create({
         data: { diary_post_id: diaryPostId, content, create_date: new Date() },
