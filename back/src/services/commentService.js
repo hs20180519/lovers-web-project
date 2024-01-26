@@ -33,7 +33,7 @@ class CommentService {
 
   async deleteComment(commentId) {
     try {
-      return await prisma.comments.delete({
+      await prisma.comments.delete({
         where: { comment_id: commentId },
       });
     } catch (error) {

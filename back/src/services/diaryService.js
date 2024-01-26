@@ -53,7 +53,7 @@ class DiaryService {
 
   async deleteDiaryPost(diaryPostId) {
     try {
-      return await prisma.diary_posts.delete({
+      await prisma.diary_posts.delete({
         where: { diary_post_id: diaryPostId },
       });
     } catch (error) {
