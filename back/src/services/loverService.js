@@ -24,6 +24,21 @@ class LoverService {
       throw error;
     }
   }
+
+  async applyLoverByEmail(applyUserEmail, acceptUserEmail) {
+    try {
+      return await prisma.pairing_requests.create({
+        data: {
+          apply_user_email: applyUserEmail,
+          accept_user_email: acceptUserEmail,
+          apply: 1,
+          accept: 0,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new LoverService();

@@ -25,6 +25,17 @@ class LoverController {
       res.status(500).json({ error: "Internal server error during getting user by email" });
     }
   }
+
+  async applyLoverByEmail(req, res) {
+    const { applyUserEmail, acceptUserEmail } = req.body;
+    try {
+      const result = await loverService.applyLoverByEmail(applyUserEmail, acceptUserEmail);
+      res.status(201).json({ result });
+    } catch (error) {
+      logger.error("Error during applyLoverByEmail");
+      res.status(500).json({ error: "Internal server error during applying lover by email" });
+    }
+  }
 }
 
 module.exports = new LoverController();
