@@ -80,11 +80,6 @@ model users {
   email                          String               @unique(map: "email_UNIQUE") @db.VarChar(30)
   password                       String               @db.VarChar(60)
   profile_image                  String?              @db.VarChar(255)
-  lover_id                       Int?
-  lover_nickname                 String?              @db.VarChar(10)
-  is_accepted                    Int?                 @db.TinyInt
-  has_applied                    Int?                 @db.TinyInt
-  has_apply                      Int?                 @db.TinyInt
   nickname                       String               @unique(map: "nickname_UNIQUE") @db.VarChar(30)
   account_book_posts             account_book_posts[]
   diary_posts                    diary_posts[]
