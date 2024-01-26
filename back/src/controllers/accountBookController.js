@@ -31,18 +31,18 @@ class AccountBookController {
     }
   }
 
-  async getAccountBookByDate(req, res) {
+  async getAccountBooksByDate(req, res) {
     const loverId = req.params.lover_id;
     const { year, month } = req.query;
     try {
-      const accountBookPosts = await accountBookService.getAccountBookByDate(
+      const accountBookPosts = await accountBookService.getAccountBooksByDate(
         Number(loverId),
         year,
         month,
       );
       res.status(200).json(accountBookPosts);
     } catch (error) {
-      logger.error("Error during getAccountBook", error);
+      logger.error("Error during getAccountBooks", error);
     }
   }
 

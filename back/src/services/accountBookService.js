@@ -29,7 +29,7 @@ class AccountBookService {
     }
   }
 
-  async getAccountBookByDate(loverId, year, month) {
+  async getAccountBooksByDate(loverId, year, month) {
     try {
       return await prisma.account_book_posts.findMany({
         where: {
