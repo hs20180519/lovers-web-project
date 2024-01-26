@@ -14,9 +14,6 @@ class AccountBookController {
         useDate,
         content,
       );
-      if (!user) {
-        res.status(500).json({ error: "Error during creating accountBook" });
-      }
       res.status(200).json({ user });
     } catch (error) {
       logger.error("Error during creatAccountBook", error);
@@ -27,11 +24,6 @@ class AccountBookController {
     const { accountBookPostId } = req.params;
     try {
       const result = await accountBookService.deleteAccountBookById(Number(accountBookPostId));
-      if (!result) {
-        res.status(401).json({
-          error: "Invalid accountBookPostId",
-        });
-      }
       res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteAccountBook", error);
@@ -47,9 +39,6 @@ class AccountBookController {
         year,
         month,
       );
-      if (!accountBookPosts) {
-        res.status(500).json({ error: "error" });
-      }
       res.status(201).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBook", error);
@@ -66,14 +55,9 @@ class AccountBookController {
         useDate,
         content,
       );
-      if (!post) {
-        res.status(500).json({
-          error: "Error during updating accountBookPost",
-        });
-      }
       res.status(200).json({ post });
     } catch (error) {
-      logger.errored("Error during updateAccountBookPost", error);
+      logger.error("Error during updateAccountBookPost", error);
       res.status(500).json({ error: "Internal server error during accountBookPost update" });
     }
   }
