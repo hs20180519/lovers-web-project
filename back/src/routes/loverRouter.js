@@ -4,8 +4,8 @@ const { authenticateJwt } = require("../middlewares/passportJwt");
 
 const loverRouter = express.Router();
 
-loverRouter.post("/make", loverController.makeLoverId);
-loverRouter.post("/apply", loverController.applyLoverByEmail);
-loverRouter.patch("/accept", loverController.acceptLoverByEmail);
+loverRouter.post("/make", authenticateJwt, loverController.makeLoverId);
+loverRouter.post("/apply", authenticateJwt, loverController.applyLoverByEmail);
+loverRouter.patch("/accept", authenticateJwt, loverController.acceptLoverByEmail);
 
 module.exports = loverRouter;
