@@ -32,8 +32,8 @@ class LoverService {
         data: {
           apply_user_email: applyUserEmail,
           accept_user_email: acceptUserEmail,
-          apply: 1,
-          accept: 0,
+          is_applied: 1,
+          is_accepted: 0,
         },
       });
     } catch (error) {
@@ -49,7 +49,7 @@ class LoverService {
           accept_user_email: acceptUserEmail,
         },
         data: {
-          accept: 1,
+          is_accepted: 1,
         },
       });
     } catch (error) {
