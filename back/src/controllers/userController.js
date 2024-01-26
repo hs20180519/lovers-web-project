@@ -6,16 +6,12 @@ const { diskStorage } = require("multer");
 
 class UserController {
   async getUserProfile(req, res) {
-    const userId = parseInt(req.params.user_id);
+    const userId = req.user.user_id;
     try {
       const user = await userService.getUserProfile(userId);
-      if (!user) {
-        res.status(500).json({
-          error: "Error getting user",
-        });
-      }
-      const { email, profile_image, lover_id, lover_nickname, nickname } = user;
-      res.status(201).json({ email, profile_image, lover_id, lover_nickname, nickname });
+      //const { email, profile_image, lover_id, lover_nickname, nickname } = user;
+      res.status(201).json({ user });
+      //email, profile_image, lover_id, lover_nickname, nickname });
     } catch (error) {
       logger.error("Error during getUserProfile", error);
       res.status(500).json({ error: "Internal server error getting user profile." });
@@ -24,8 +20,7 @@ class UserController {
 
   async uploadProfileImage(req, res) {
     try {
-      const userId = parseInt(req.params.user_id);
-
+      const userId = req.user.user_id;
       const storage = diskStorage({
         destination: "uploads/", //이미지 저장될 폴더
         filename: (req, file, cb) => {
@@ -35,16 +30,10 @@ class UserController {
         },
       });
       const upload = multer({ storage }).single("profileImage");
-
-      upload(req, res, async (err) => {
-        if (err) {
-          logger.error("Error during profile image upload", err);
-          res.status(500).json({ error: "Internal server error during profile image upload." });
-        } else {
-          const filename = req.file.filename;
-          const updatedUser = await userService.uploadProfileImage(userId, filename);
-          res.status(201).json({ updatedUser });
-        }
+      upload(req, res, async () => {
+        const filename = req.file.filename;
+        const updatedUser = await userService.uploadProfileImage(userId, filename);
+        res.status(201).json({ updatedUser });
       });
     } catch (error) {
       logger.error("Error during profile image upload", error);

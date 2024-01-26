@@ -4,13 +4,9 @@ const logger = require("../config/logger");
 class AuthController {
   async sendVerificationEmail(req, res) {
     const { email } = req.body;
+    //이메일 중복이면 아예 이메일 발송 못하도록 수정
     try {
-      const user = await authService.sendVerificationEmail(email);
-      if (!user) {
-        res.status(500).json({
-          error: "Error sending verification email",
-        });
-      }
+      await authService.sendVerificationEmail(email);
       res.status(200).json({ message: "Verification email sent successfully." });
     } catch (error) {
       logger.error("Error during sendVerificationEmail", error);
@@ -23,12 +19,12 @@ class AuthController {
     try {
       const user = await authService.confirmEmailCode(email, verificationCode);
       if (user === null) {
-        res.status(404).json({
+        return res.status(404).json({
           error: "Verification code not found for the provided email.",
         });
       }
       if (user === false) {
-        res.status(400).json({
+        return res.status(400).json({
           error: "Incorrect verification code.",
         });
       }
@@ -41,21 +37,10 @@ class AuthController {
 
   async createUser(req, res) {
     const { email, password, nickname } = req.body;
-
+    //email, nickname 중복 확인해야함
     try {
-      const user = await authService.createUser(email, password, nickname);
-      if (!user) {
-        res.status(500).json({
-          error: "Failed to create a new user.",
-        });
-      }
-
-      const deleteUser = await authService.deleteVerificationCode(email);
-      if (!deleteUser) {
-        res.status(500).json({
-          error: "Failed to delete the verification code.",
-        });
-      }
+      await authService.createUser(email, password, nickname);
+      await authService.deleteVerificationCode(email);
       res.status(201).json({ message: "User created successfully!" });
     } catch (error) {
       logger.error("Error during createUser", error);
@@ -67,11 +52,6 @@ class AuthController {
     const { nickname } = req.body;
     try {
       const user = await authService.loginUser(nickname);
-      if (!user) {
-        res.status(401).json({
-          error: "Failed to login",
-        });
-      }
       const { token, userId } = user;
       res.status(200).json({ token, userId });
     } catch (error) {
@@ -82,12 +62,7 @@ class AuthController {
   async deleteUser(req, res) {
     const userId = req.user.user_id;
     try {
-      const result = await authService.deleteUser(userId);
-      if (!result) {
-        res.status(401).json({
-          error: "Invalid userId",
-        });
-      }
+      await authService.deleteUser(userId);
       res.status(204).send();
     } catch (error) {
       logger.error("Error during user delete", error);
@@ -96,16 +71,16 @@ class AuthController {
   }
 
   async findUserNickname(req, res) {
-    const { email } = req.params;
+    const { email } = req.query;
     try {
       const user = await authService.getUserByEmail(email);
       if (!user) {
-        res.status(404).json({ error: "User not found with the provided email." });
+        return res.status(404).json({ error: "User not found with the provided email." });
       }
 
       const nickname = await authService.sendNicknameEmail(user);
       if (!nickname) {
-        res.status(500).json({ error: "Error sending email" });
+        return res.status(500).json({ error: "Error sending email" });
       }
 
       res.status(200).json({ nickname });
@@ -120,14 +95,14 @@ class AuthController {
     try {
       const user = await authService.getUserByNickname(nickname);
       if (!user) {
-        res.status(401).json({
+        return res.status(401).json({
           error: "Invalid nickname",
         });
       }
 
       const updatedUser = await authService.sendTemporaryPasswordEmail(user.email);
       if (!updatedUser) {
-        res.status(500).json({
+        return res.status(500).json({
           error: "Error in update password",
         });
       }

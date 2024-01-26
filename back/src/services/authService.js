@@ -66,7 +66,7 @@ class AuthService {
 
   async deleteVerificationCode(email) {
     try {
-      return await prisma.verifications.deleteMany({
+      await prisma.verifications.deleteMany({
         where: { email },
       });
     } catch (error) {

@@ -6,11 +6,6 @@ class CommentController {
     const { diaryPostId, content } = req.body;
     try {
       const comment = await commentService.createComment(diaryPostId, content);
-      if (!comment) {
-        res.status(500).json({
-          error: "Error creating comment",
-        });
-      }
       res.status(200).json({ comment });
     } catch (error) {
       logger.error("Error during createComment");
@@ -22,11 +17,6 @@ class CommentController {
     const diaryPostId = parseInt(req.params.diary_post_id);
     try {
       const comments = await commentService.getComments(diaryPostId);
-      if (!comments) {
-        res.status(500).json({
-          error: "Error getting comments",
-        });
-      }
       res.status(200).json({ comments });
     } catch (error) {
       logger.error("Error during getComments");
@@ -38,12 +28,6 @@ class CommentController {
     const { commentId, content } = req.body;
     try {
       const comment = await commentService.updateComment(commentId, content);
-      if (!comment) {
-        res.status(500).json({
-          error: "Error updating comment",
-        });
-      }
-
       res.status(200).json({ comment });
     } catch (error) {
       logger.error("Error during updateComment");
@@ -53,12 +37,7 @@ class CommentController {
   async deleteComment(req, res) {
     const commentId = parseInt(req.params.comment_id);
     try {
-      const result = await commentService.deleteComment(commentId);
-      if (!result) {
-        res.status(500).json({
-          error: "Error deleting comment",
-        });
-      }
+      await commentService.deleteComment(commentId);
       res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteComment");
