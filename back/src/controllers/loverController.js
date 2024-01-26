@@ -14,18 +14,6 @@ class LoverController {
     }
   }
 
-  // async getUseByEmail(req, res) {
-  //   const { email } = req.query;
-  //   try {
-  //     const user = await loverService.getUserByEmail(email);
-  //     const { nickname } = user;
-  //     res.status(200).json({ nickname });
-  //   } catch (error) {
-  //     logger.error("Error during getUserByEmail", error);
-  //     res.status(500).json({ error: "Internal server error during getting user by email" });
-  //   }
-  // }
-
   async applyLoverByEmail(req, res) {
     const { applyUserEmail, acceptUserEmail } = req.body;
     try {
