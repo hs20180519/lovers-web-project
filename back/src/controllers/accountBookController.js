@@ -15,34 +15,37 @@ class AccountBookController {
         useDate,
         content,
       );
-      res.status(200).json({ user });
+      res.status(201).json({ user });
     } catch (error) {
       logger.error("Error during creatAccountBook", error);
+      res.status(500).json({ error: "Internal server error during creating accountBook" });
     }
   }
 
   async deleteAccountBookById(req, res) {
     const { accountBookPostId } = req.params;
     try {
-      const result = await accountBookService.deleteAccountBookById(Number(accountBookPostId));
+      await accountBookService.deleteAccountBookById(Number(accountBookPostId));
       res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteAccountBook", error);
+      res.status(500).json({ error: "Internal server error during deleting accountBook" });
     }
   }
 
-  async getAccountBookByDate(req, res) {
+  async getAccountBooksByDate(req, res) {
     const loverId = req.params.lover_id;
     const { year, month } = req.query;
     try {
-      const accountBookPosts = await accountBookService.getAccountBookByDate(
+      const accountBookPosts = await accountBookService.getAccountBooksByDate(
         Number(loverId),
         year,
         month,
       );
-      res.status(201).json(accountBookPosts);
+      res.status(200).json(accountBookPosts);
     } catch (error) {
-      logger.error("Error during getAccountBook", error);
+      logger.error("Error during getAccountBooks", error);
+      res.status(500).json({ error: "Internal server error during getting accountBooks" });
     }
   }
 
@@ -59,7 +62,7 @@ class AccountBookController {
       res.status(200).json({ post });
     } catch (error) {
       logger.error("Error during updateAccountBookPost", error);
-      res.status(500).json({ error: "Internal server error during accountBookPost update" });
+      res.status(500).json({ error: "Internal server error during updating accountBookPost" });
     }
   }
 }

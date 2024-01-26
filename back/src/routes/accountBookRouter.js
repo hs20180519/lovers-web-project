@@ -13,7 +13,7 @@ accountBookRouter.delete(
 accountBookRouter.get(
   "/posts/:lover_id",
   authenticateJwt,
-  accountBookController.getAccountBookByDate,
+  accountBookController.getAccountBooksByDate,
 );
 accountBookRouter.patch("/posts", authenticateJwt, accountBookController.updateAccountBookPost);
 

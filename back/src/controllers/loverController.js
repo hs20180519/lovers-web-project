@@ -3,8 +3,10 @@ const logger = require("../config/logger");
 
 class LoverController {
   async makeLoverId(req, res) {
-    const { userAId, userBId } = req.body;
-
+    const acceptUserEmail = req.user.email;
+    const { applyUserEmail } = req.body;
+    const userAId = await loverService.getUserIdByEmail(applyUserEmail);
+    const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
     try {
       const user = await loverService.makeLoverId(userAId, userBId);
       res.status(201).json({ user });
@@ -26,16 +28,13 @@ class LoverController {
     }
   }
 
-  async acceptLoverByEmail(req, res) {
+  async acceptLoverByEmail(req, res, next) {
     const acceptUserEmail = req.user.email;
     const { applyUserEmail } = req.body;
     try {
-      await loverService.accpetLoverByEmail(applyUserEmail, acceptUserEmail);
+      await loverService.acceptLoverByEmail(applyUserEmail, acceptUserEmail);
       await loverService.deletePairingRequest(applyUserEmail, acceptUserEmail);
-      const userAId = await loverService.getUserIdByEmail(applyUserEmail);
-      const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
-      const result = await loverService.makeLoverId(userAId, userBId);
-      res.status(200).json({ result });
+      next();
     } catch (error) {
       logger.error("Error during acceptLoverByEmail", error);
       res.status(500).json({ error: "Internal server error during accepting lover by email" });

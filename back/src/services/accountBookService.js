@@ -21,7 +21,7 @@ class AccountBookService {
 
   async deleteAccountBookById(accountBookPostId) {
     try {
-      return await prisma.account_book_posts.delete({
+      await prisma.account_book_posts.delete({
         where: { account_book_post_id: accountBookPostId },
       });
     } catch (error) {
@@ -29,7 +29,7 @@ class AccountBookService {
     }
   }
 
-  async getAccountBookByDate(loverId, year, month) {
+  async getAccountBooksByDate(loverId, year, month) {
     try {
       return await prisma.account_book_posts.findMany({
         where: {
