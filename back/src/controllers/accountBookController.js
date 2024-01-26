@@ -18,6 +18,7 @@ class AccountBookController {
       res.status(201).json({ user });
     } catch (error) {
       logger.error("Error during creatAccountBook", error);
+      res.status(500).json({ error: "Internal server error during creating accountBook" });
     }
   }
 
@@ -28,6 +29,7 @@ class AccountBookController {
       res.status(204).send();
     } catch (error) {
       logger.error("Error during deleteAccountBook", error);
+      res.status(500).json({ error: "Internal server error during deleting accountBook" });
     }
   }
 
@@ -43,6 +45,7 @@ class AccountBookController {
       res.status(200).json(accountBookPosts);
     } catch (error) {
       logger.error("Error during getAccountBooks", error);
+      res.status(500).json({ error: "Internal server error during getting accountBooks" });
     }
   }
 
@@ -59,7 +62,7 @@ class AccountBookController {
       res.status(200).json({ post });
     } catch (error) {
       logger.error("Error during updateAccountBookPost", error);
-      res.status(500).json({ error: "Internal server error during accountBookPost update" });
+      res.status(500).json({ error: "Internal server error during updating accountBookPost" });
     }
   }
 }
