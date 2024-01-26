@@ -15,7 +15,8 @@ class LoverController {
   }
 
   async applyLoverByEmail(req, res) {
-    const { applyUserEmail, acceptUserEmail } = req.body;
+    const applyUserEmail = req.user.email;
+    const { acceptUserEmail } = req.body;
     try {
       const result = await loverService.applyLoverByEmail(applyUserEmail, acceptUserEmail);
       res.status(201).json({ result });
@@ -26,7 +27,8 @@ class LoverController {
   }
 
   async acceptLoverByEmail(req, res) {
-    const { applyUserEmail, acceptUserEmail } = req.body;
+    const acceptUserEmail = req.user.email;
+    const { applyUserEmail } = req.body;
     try {
       await loverService.accpetLoverByEmail(applyUserEmail, acceptUserEmail);
       await loverService.deletePairingRequest(applyUserEmail, acceptUserEmail);

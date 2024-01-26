@@ -4,7 +4,8 @@ const { use } = require("passport");
 
 class AccountBookController {
   async createAccountBook(req, res) {
-    const { loverId, userId, category, amount, useDate, content } = req.body;
+    const userId = req.user.user_id;
+    const { loverId, category, amount, useDate, content } = req.body;
     try {
       const user = await accountBookService.createAccountBook(
         loverId,
