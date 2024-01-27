@@ -12,5 +12,6 @@ loverRouter.patch(
   loverController.acceptLoverByEmail,
   loverController.makeLoverId,
 );
+loverRouter.delete("/", authenticateJwt, loverController.deleteLoverByUserId);
 
 module.exports = loverRouter;

@@ -51,6 +51,17 @@ class LoverController {
       res.status(500).json({ error: "Internal server error during accepting lover by email" });
     }
   }
+
+  async deleteLoverByUserId(req, res) {
+    const userId = req.user.user_id;
+    try {
+      await loverService.deleteLoverByUserId(userId);
+      res.status(204).json();
+    } catch (error) {
+      logger.error("Error during deleteLoverByUserId");
+      res.status(500).json({ error: "Internal server error during deleting lover by user id" });
+    }
+  }
 }
 
 module.exports = new LoverController();
