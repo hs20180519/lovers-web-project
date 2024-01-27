@@ -69,6 +69,33 @@ class LoverService {
       throw error;
     }
   }
+
+  async deleteLoverByUserId(userId) {
+    try {
+      await prisma.lovers.deleteMany({
+        where: {
+          OR: [{ user_a_id: userId }, { user_b_id: userId }],
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async makeLoverNickname(userId, loverNickname) {
+    try {
+      return await prisma.users.update({
+        where: {
+          user_id: userId,
+        },
+        data: {
+          lover_nickname: loverNickname,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new LoverService();
