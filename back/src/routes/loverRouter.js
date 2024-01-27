@@ -13,5 +13,6 @@ loverRouter.patch(
   loverController.makeLoverId,
 );
 loverRouter.delete("/", authenticateJwt, loverController.deleteLoverByUserId);
+loverRouter.patch("/alias", authenticateJwt, loverController.makeLoverNickname);
 
 module.exports = loverRouter;

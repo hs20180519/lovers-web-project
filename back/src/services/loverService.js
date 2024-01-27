@@ -81,6 +81,21 @@ class LoverService {
       throw error;
     }
   }
+
+  async makeLoverNickname(userId, loverNickname) {
+    try {
+      return await prisma.users.update({
+        where: {
+          user_id: userId,
+        },
+        data: {
+          lover_nickname: loverNickname,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new LoverService();

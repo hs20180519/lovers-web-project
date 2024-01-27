@@ -62,6 +62,18 @@ class LoverController {
       res.status(500).json({ error: "Internal server error during deleting lover by user id" });
     }
   }
+
+  async makeLoverNickname(req, res) {
+    const userId = req.user.user_id;
+    const { loverNickname } = req.body;
+    try {
+      const result = await loverService.makeLoverNickname(userId, loverNickname);
+      res.status(201).json({ result });
+    } catch (error) {
+      logger.error("Error during makeLoverNickname");
+      res.status(500).json({ error: "Internal server error during making lover nickname" });
+    }
+  }
 }
 
 module.exports = new LoverController();
