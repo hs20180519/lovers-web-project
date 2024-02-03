@@ -50,15 +50,30 @@ class AuthService {
   }
 
   async createUser(email, password, nickname) {
+    // 중복된 이메일 확인
+    const existingEmailUser = await prisma.users.findUnique({
+      where: { email },
+    });
+    if (existingEmailUser) {
+      throw new Error("Email already exists.");
+    }
+    // 중복된 닉네임 확인
+    const existingNicknameUser = await prisma.users.findUnique({
+      where: { nickname },
+    });
+    if (existingNicknameUser) {
+      throw new Error("Nickname already exists.");
+    }
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      return await prisma.users.create({
+      await prisma.users.create({
         data: {
           email,
           password: hashedPassword,
           nickname,
         },
       });
+      return { email, password: hashedPassword, nickname };
     } catch (error) {
       throw error;
     }
@@ -100,9 +115,17 @@ class AuthService {
 
   async deleteUser(userId) {
     try {
-      return await prisma.users.delete({
+      await prisma.users.delete({
         where: { user_id: userId },
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAllUser() {
+    try {
+      await prisma.users.deleteMany({});
     } catch (error) {
       throw error;
     }
@@ -117,6 +140,16 @@ class AuthService {
       throw error;
     }
   }
+
+  async getUserByNickname(nickname) {
+    try {
+      return await prisma.users.findUnique({
+        where: { nickname },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
   async sendNicknameEmail(user) {
     try {
       const { email, nickname } = user;
@@ -125,16 +158,6 @@ class AuthService {
 
       await emailService.sendEmail(email, subject, text);
       return user.nickname;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getUserByNickname(nickname) {
-    try {
-      return await prisma.users.findUnique({
-        where: { nickname },
-      });
     } catch (error) {
       throw error;
     }

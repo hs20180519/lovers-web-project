@@ -1,4 +1,5 @@
 const authService = require("../services/authService");
+
 const logger = require("../config/logger");
 
 class AuthController {
@@ -37,7 +38,7 @@ class AuthController {
 
   async createUser(req, res) {
     const { email, password, nickname } = req.body;
-    //email, nickname 중복 확인해야함
+
     try {
       await authService.createUser(email, password, nickname);
       await authService.deleteVerificationCode(email);
