@@ -2,23 +2,23 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class UserService {
   async getUserProfile(userId) {
-    try {
-      return await prisma.users.findUnique({
-        where: { user_id: userId },
-      });
-    } catch (error) {
-      throw error;
+    const userProfile = await prisma.users.findUnique({
+      where: { user_id: userId },
+    });
+    if (!userProfile) {
+      throw new Error(`User not found with userId ${userId}`);
     }
+    return userProfile;
   }
   async uploadProfileImage(userId, filename) {
-    try {
-      return await prisma.users.update({
-        where: { user_id: userId },
-        data: { profile_image: filename },
-      });
-    } catch (error) {
-      throw error;
+    const updatedUser = await prisma.users.update({
+      where: { user_id: userId },
+      data: { profile_image: filename },
+    });
+    if (!updatedUser) {
+      throw new Error("Failed to upload profile image");
     }
+    return updatedUser;
   }
 }
 
