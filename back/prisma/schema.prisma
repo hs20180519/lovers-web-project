@@ -73,7 +73,7 @@ model lovers {
 
 model verifications {
   verification_id   Int    @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
-  email             String @db.VarChar(30)
+  email             String @db.VarChar(30) @unique
   verification_code String @db.VarChar(10)
 }
 

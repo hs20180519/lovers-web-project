@@ -1,29 +1,25 @@
 const authService = require("../services/authService");
 
-const logger = require("../config/logger");
-
 class AuthController {
-  async sendVerificationEmail(req, res) {
+  async sendVerificationEmail(req, res, next) {
     const { email } = req.body;
     //이메일 중복이면 아예 이메일 발송 못하도록 수정
     try {
-      const verificationCode = await authService.sendVerificationEmail(email);
-      await authService.createVerificationCode(verificationCode);
-      res.status(200).json({ message: "Verification email sent successfully." });
+      await authService.sendVerificationEmail(email);
+      res.status(200).json({ message: "Verification email sent successfully!" });
     } catch (error) {
-      logger.error("Error during sendVerificationEmail", error);
-      res.status(500).json({ error: "Internal server error during email verification." });
+      next(error);
     }
   }
 
-  async confirmEmailCode(req, res) {
+  async confirmEmailCode(req, res, next) {
     const { email, verificationCode } = req.body;
     try {
       await authService.confirmEmailCode(email, verificationCode);
-      res.status(200).json({ message: "Email verification successful." });
+      await authService.deleteVerificationCode(email);
+      res.status(200).json({ message: "Email successfully verified!" });
     } catch (error) {
-      logger.error("Error during confirmEmailCode", error);
-      res.status(500).json({ error: "Internal server error during email verification." });
+      next(error);
     }
   }
 
@@ -31,75 +27,51 @@ class AuthController {
     const { email, password, nickname } = req.body;
     try {
       await authService.createUser(email, password, nickname);
-      await authService.deleteVerificationCode(email);
       res.status(201).json({ message: "User created successfully!" });
     } catch (error) {
       return next(error);
     }
   }
 
-  async loginUser(req, res) {
+  async loginUser(req, res, next) {
     const { nickname } = req.body;
     try {
       const user = await authService.loginUser(nickname);
       const { token, userId } = user;
       res.status(200).json({ token, userId });
     } catch (error) {
-      logger.error("Error during user login", error);
-      res.status(500).json({ error: "Internal server error during user login." });
+      next(error);
     }
   }
-  async deleteUser(req, res) {
+  async deleteUser(req, res, next) {
     const userId = req.user.user_id;
     try {
       await authService.deleteUser(userId);
       res.status(204).send();
     } catch (error) {
-      logger.error("Error during user delete", error);
-      res.status(500).json({ error: "Internal server error during user deletion." });
+      next(error);
     }
   }
 
-  async findUserNickname(req, res) {
+  async findUserNickname(req, res, next) {
     const { email } = req.query;
     try {
       const user = await authService.getUserByEmail(email);
-      if (!user) {
-        return res.status(404).json({ error: "User not found with the provided email." });
-      }
-
-      const nickname = await authService.sendNicknameEmail(user);
-      if (!nickname) {
-        return res.status(500).json({ error: "Error sending email" });
-      }
-
-      res.status(200).json({ nickname });
+      await authService.sendNicknameEmail(user);
+      res.status(200).json({ message: "Email sent with nickname successfully!" });
     } catch (error) {
-      logger.error("Error during find user nickname", error);
-      res.status(500).json({ error: "Internal server error during user nickname retrieval." });
+      next(error);
     }
   }
 
-  async findUserPassword(req, res) {
+  async findUserPassword(req, res, next) {
     const { nickname } = req.body;
     try {
       const user = await authService.getUserByNickname(nickname);
-      if (!user) {
-        return res.status(401).json({
-          error: "Invalid nickname",
-        });
-      }
-
-      const updatedUser = await authService.sendTemporaryPasswordEmail(user.email);
-      if (!updatedUser) {
-        return res.status(500).json({
-          error: "Error in update password",
-        });
-      }
-      res.status(200).json({ message: "User updated successfully!" });
+      await authService.sendTemporaryPasswordEmail(user.email);
+      res.status(200).json({ message: "Temporary password sent successfully!" });
     } catch (error) {
-      logger.error("Error during find user password", error);
-      res.status(500).json({ error: "Internal server error during password retrieval." });
+      next(error);
     }
   }
 }

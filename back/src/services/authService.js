@@ -12,44 +12,47 @@ class AuthService {
     const text = `인증 코드 : ${verificationCode}`;
     //메일 보내기
     await emailService.sendEmail(email, subject, text);
-    return verificationCode;
+
+    const existingVerificationCode = await prisma.verifications.findUnique({
+      where: { email },
+    });
+    if (!existingVerificationCode) {
+      await prisma.verifications.create({
+        data: {
+          email,
+          verification_code: verificationCode,
+        },
+      });
+    } else {
+      await prisma.verifications.update({
+        where: { email },
+        data: {
+          verification_code: verificationCode,
+        },
+      });
+    }
   }
 
-  async createVerificationCode(email, verificationCode) {
-    return prisma.verifications.create({
-      data: {
-        email,
-        verification_code: verificationCode,
-      },
-    });
-  }
   //이메일, 보안문자 받아서 해당 이메일의 보안문자인지 확인
   async confirmEmailCode(email, verificationCode) {
-    const record = await prisma.verifications.findFirst({
+    const record = await prisma.verifications.findUnique({
       where: { email },
     });
     if (!record) {
-      //이메일을 보내지 않았을 때
       throw new Error("Verification code not found for the provided email.");
     }
-    if (
-      //보안문자가 틀렸을 때
-      record.verification_code !== verificationCode
-    ) {
+    if (record.verification_code !== verificationCode) {
       throw new Error("Incorrect verification code.");
     }
-    return record;
   }
 
   async createUser(email, password, nickname) {
-    // 중복된 이메일 확인
     const existingEmailUser = await prisma.users.findUnique({
       where: { email },
     });
     if (existingEmailUser) {
       throw new Error("Email already exists.");
     }
-    // 중복된 닉네임 확인
     const existingNicknameUser = await prisma.users.findUnique({
       where: { nickname },
     });
@@ -58,7 +61,7 @@ class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    return prisma.users.create({
+    await prisma.users.create({
       data: {
         email,
         password: hashedPassword,
@@ -68,9 +71,13 @@ class AuthService {
   }
 
   async deleteVerificationCode(email) {
-    await prisma.verifications.deleteMany({
-      where: { email },
-    });
+    await prisma.verifications
+      .deleteMany({
+        where: { email },
+      })
+      .catch(() => {
+        throw new Error(`Failed to delete verification code for email ${email}`);
+      });
   }
 
   async loginUser(nickname) {
@@ -94,49 +101,64 @@ class AuthService {
   }
 
   async deleteUser(userId) {
-    await prisma.users.delete({
-      where: { user_id: userId },
-    });
+    await prisma.users
+      .delete({
+        where: { user_id: userId },
+      })
+      .catch(() => {
+        throw new Error(`Failed to delete user for user_id ${userId}`);
+      });
   }
 
-  async deleteAllUser() {
-    await prisma.users.deleteMany({});
+  async deleteAllUsers() {
+    await prisma.users.deleteMany({}).catch(() => {
+      throw new Error(`Failed to delete all users`);
+    });
   }
 
   async getUserByEmail(email) {
-    return prisma.users.findUnique({
+    const user = await prisma.users.findUnique({
       where: { email },
     });
+    if (!user) {
+      throw new Error("User not found with the provided email.");
+    }
+    return user;
   }
 
   async getUserByNickname(nickname) {
-    return prisma.users.findUnique({
+    const user = await prisma.users.findUnique({
       where: { nickname },
     });
+    if (!user) {
+      throw new Error("User not found with the provided nickname.");
+    }
+    return user;
   }
   async sendNicknameEmail(user) {
     const { email, nickname } = user;
     const subject = "[ACT]닉네임 안내";
     const text = `고객님의 닉네임은 ${nickname} 입니다.`;
-
     await emailService.sendEmail(email, subject, text);
-    return user.nickname;
   }
+
   async sendTemporaryPasswordEmail(email) {
     //여섯 자리의 랜덤 비밀번호 생성
     const temporaryPassword = Math.floor(100000 + Math.random() * 900000).toString();
     const subject = "[ACT]임시 비밀번호 안내";
     const text = `고객님의 임시 비밀번호는 ${temporaryPassword} 입니다.`;
-
     //메일 발송
     await emailService.sendEmail(email, subject, text);
 
     //비밀번호 변경
     const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
-    return prisma.users.update({
+    const user = await prisma.users.update({
       where: { email },
       data: { password: hashedPassword },
     });
+    if (!user) {
+      throw new Error("Failed to update user password");
+    }
   }
 }
 

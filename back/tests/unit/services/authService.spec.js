@@ -11,7 +11,7 @@ describe("AuthService", () => {
     };
   });
   afterAll(async () => {
-    await AuthService.deleteAllUser();
+    await AuthService.deleteAllUsers();
   });
 
   describe("sendVerificationEmail", () => {
