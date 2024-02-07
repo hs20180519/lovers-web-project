@@ -11,14 +11,10 @@ class UserService {
     return userProfile;
   }
   async uploadProfileImage(userId, filename) {
-    const updatedUser = await prisma.users.update({
+    await prisma.users.update({
       where: { user_id: userId },
       data: { profile_image: filename },
     });
-    if (!updatedUser) {
-      throw new Error("Failed to upload profile image");
-    }
-    return updatedUser;
   }
 }
 
