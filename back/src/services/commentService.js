@@ -2,43 +2,31 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 class CommentService {
   async createComment(diaryPostId, content) {
-    try {
-      return await prisma.comments.create({
-        data: { diary_post_id: diaryPostId, content, create_date: new Date() },
-      });
-    } catch (error) {
-      throw error;
-    }
+    const comment = await prisma.comments.create({
+      data: { diary_post_id: diaryPostId, content, create_date: new Date() },
+    });
+    return comment;
   }
+
   async getComments(diaryPostId) {
-    try {
-      return await prisma.comments.findMany({
-        where: { diary_post_id: diaryPostId },
-      });
-    } catch (error) {
-      throw error;
-    }
+    const comments = await prisma.comments.findMany({
+      where: { diary_post_id: diaryPostId },
+    });
+    return comments;
   }
+
   async updateComment(commentId, content) {
-    try {
-      return await prisma.comments.update({
-        where: { comment_id: commentId },
-        data: { content },
-      });
-    } catch (error) {
-      throw error;
-    }
+    const updatedComment = await prisma.comments.update({
+      where: { comment_id: commentId },
+      data: { content },
+    });
+    return updatedComment;
   }
 
   async deleteComment(commentId) {
-    try {
-      await prisma.comments.delete({
-        where: { comment_id: commentId },
-      });
-    } catch (error) {
-      throw error;
-    }
+    await prisma.comments.delete({
+      where: { comment_id: commentId },
+    });
   }
 }
-
 module.exports = new CommentService();

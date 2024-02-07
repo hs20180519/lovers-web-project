@@ -6,7 +6,7 @@ class AuthController {
     //이메일 중복이면 아예 이메일 발송 못하도록 수정
     try {
       await authService.sendVerificationEmail(email);
-      res.status(200).json({ message: "Verification email sent successfully!" });
+      res.status(200).json({ message: "Verification email successfully sent!" });
     } catch (error) {
       next(error);
     }
@@ -27,7 +27,7 @@ class AuthController {
     const { email, password, nickname } = req.body;
     try {
       await authService.createUser(email, password, nickname);
-      res.status(201).json({ message: "User created successfully!" });
+      res.status(201).json({ message: "User successfully created!" });
     } catch (error) {
       return next(error);
     }
@@ -58,7 +58,7 @@ class AuthController {
     try {
       const user = await authService.getUserByEmail(email);
       await authService.sendNicknameEmail(user);
-      res.status(200).json({ message: "Email sent with nickname successfully!" });
+      res.status(200).json({ message: "Email successfully sent with nickname!" });
     } catch (error) {
       next(error);
     }
@@ -69,7 +69,7 @@ class AuthController {
     try {
       const user = await authService.getUserByNickname(nickname);
       await authService.sendTemporaryPasswordEmail(user.email);
-      res.status(200).json({ message: "Temporary password sent successfully!" });
+      res.status(200).json({ message: "Temporary password successfully sent!" });
     } catch (error) {
       next(error);
     }

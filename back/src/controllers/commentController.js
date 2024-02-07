@@ -1,47 +1,42 @@
 const commentService = require("../services/commentService");
-const logger = require("../config/logger");
 
 class CommentController {
-  async createComment(req, res) {
+  async createComment(req, res, next) {
     const { diaryPostId, content } = req.body;
     try {
       const comment = await commentService.createComment(diaryPostId, content);
       res.status(200).json({ comment });
     } catch (error) {
-      logger.error("Error during createComment");
-      res.status(500).json({ error: "Internal server creating comment" });
+      next(error);
     }
   }
 
-  async getComments(req, res) {
+  async getComments(req, res, next) {
     const diaryPostId = parseInt(req.params.diary_post_id);
     try {
       const comments = await commentService.getComments(diaryPostId);
       res.status(200).json({ comments });
     } catch (error) {
-      logger.error("Error during getComments");
-      res.status(500).json({ error: "Internal server getting comments" });
+      next(error);
     }
   }
 
-  async updateComment(req, res) {
+  async updateComment(req, res, next) {
     const { commentId, content } = req.body;
     try {
       const comment = await commentService.updateComment(commentId, content);
       res.status(200).json({ comment });
     } catch (error) {
-      logger.error("Error during updateComment");
-      res.status(500).json({ error: "Internal server updating comment" });
+      next(error);
     }
   }
-  async deleteComment(req, res) {
+  async deleteComment(req, res, next) {
     const commentId = parseInt(req.params.comment_id);
     try {
       await commentService.deleteComment(commentId);
       res.status(204).send();
     } catch (error) {
-      logger.error("Error during deleteComment");
-      res.status(500).json({ error: "Internal server deleting comment" });
+      next(error);
     }
   }
 }

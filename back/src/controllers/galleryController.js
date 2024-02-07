@@ -1,35 +1,31 @@
 const galleryService = require("../services/galleryService");
-const logger = require("../config/logger");
 
 class GalleryController {
-  async createGalleryPhoto(req, res) {
+  async createGalleryPhoto(req, res, next) {
     const { loverId, imagePath } = req.body;
     try {
       const photo = await galleryService.createGalleryPhoto(loverId, imagePath);
       res.status(201).json({ photo });
     } catch (error) {
-      logger.error("Error during createGalleryPhoto", error);
-      res.status(500).json({ error: "Internal server error during photo creation." });
+      next(error);
     }
   }
-  async getAllGalleryPhotos(req, res) {
+  async getAllGalleryPhotos(req, res, next) {
     const loverId = parseInt(req.params.lover_id);
     try {
       const photos = await galleryService.getAllGalleryPhotos(loverId);
       res.status(200).json({ photos });
     } catch (error) {
-      logger.error("Error during getAllGalleryPhoto", error);
-      res.status(500).json({ error: "Internal server error during photo get" });
+      next(error);
     }
   }
-  async deleteGalleryPhoto(req, res) {
+  async deleteGalleryPhoto(req, res, next) {
     const galleryPhotoId = parseInt(req.params.gallery_photo_id);
     try {
       await galleryService.deleteGalleryPhoto(galleryPhotoId);
       res.status(204).send();
     } catch (error) {
-      logger.error("Error during deleteGalleryPhoto", error);
-      res.status(500).json({ error: "Internal server error during photo deleting" });
+      next(error);
     }
   }
 }

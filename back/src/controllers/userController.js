@@ -1,24 +1,20 @@
 const userService = require("../services/userService");
-const logger = require("../config/logger");
 const { extname } = require("path");
 const multer = require("multer");
 const { diskStorage } = require("multer");
 
 class UserController {
-  async getUserProfile(req, res) {
+  async getUserProfile(req, res, next) {
     const userId = req.user.user_id;
     try {
       const user = await userService.getUserProfile(userId);
-      //const { email, profile_image, lover_id, lover_nickname, nickname } = user;
       res.status(201).json({ user });
-      //email, profile_image, lover_id, lover_nickname, nickname });
     } catch (error) {
-      logger.error("Error during getUserProfile", error);
-      res.status(500).json({ error: "Internal server error getting user profile." });
+      next(error);
     }
   }
 
-  async uploadProfileImage(req, res) {
+  async uploadProfileImage(req, res, next) {
     try {
       const userId = req.user.user_id;
       const storage = diskStorage({
@@ -36,8 +32,7 @@ class UserController {
         res.status(201).json({ updatedUser });
       });
     } catch (error) {
-      logger.error("Error during profile image upload", error);
-      res.status(500).json({ error: "Internal server error during profile image upload." });
+      next(error);
     }
   }
 }
