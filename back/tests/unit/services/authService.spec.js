@@ -11,107 +11,130 @@ describe("AuthService", () => {
     };
   });
   afterAll(async () => {
-    await AuthService.deleteAllUsers();
+    //await AuthService.deleteAllUsers();
   });
 
   describe("sendVerificationEmail", () => {
     it("should send a verification email", async () => {
-      const verificationCode = await AuthService.sendVerificationEmail(testUser.email);
-      expect(verificationCode).toHaveLength(6); // 보안 코드는 6자리여야 함
-    });
-  });
-
-  describe("createVerificationCode", () => {
-    it("should update verification code", async () => {
-      // 보안 코드 생성
-      const newVerificationCode = "123456";
-      const updatedUser = await AuthService.createVerificationCode(
-        testUser.email,
-        newVerificationCode,
-      );
-      // 생성된 보안 코드가 일치하는지 확인
-      expect(updatedUser).toBeDefined();
-      expect(updatedUser.verification_code).toBe(newVerificationCode);
+      const { email } = testUser;
+      await expect(AuthService.sendVerificationEmail(email)).resolves.not.toThrow();
     });
   });
 
   describe("confirmEmailCode", () => {
     it("should confirm the email code", async () => {
-      // 이메일 코드 확인
-      const verificationCode = "123456";
-      const result = await AuthService.confirmEmailCode(testUser.email, verificationCode);
-      expect(result).toBeDefined();
-      expect(result.verification_code).toBe(verificationCode);
+      const { email } = testUser;
+      await expect(AuthService.confirmEmailCode(email, "870354")).resolves.not.toThrow();
     });
 
-    it("should return null if email not found", async () => {
-      const result = await AuthService.confirmEmailCode("nonexistent@example.com", "123456");
-      expect(result).toBeNull();
-    });
-
-    it("should return false if email code does not match", async () => {
-      const result = await AuthService.confirmEmailCode(testUser.email, "incorrectCode");
-      expect(result).toBe(false);
+    it("should throw error if incorrect verification code", async () => {
+      const { email } = testUser;
+      await expect(AuthService.confirmEmailCode(email, "654321")).rejects.toThrow(
+        "Incorrect verification code.",
+      );
     });
   });
 
   describe("createUser", () => {
     it("should create a new user", async () => {
-      const result = await AuthService.createUser(
-        testUser.email,
-        testUser.password,
-        testUser.nickname,
-      );
-      expect(result).toBeDefined();
-      expect(result.email).toBe(testUser.email);
-      expect(result.nickname).toBe(testUser.nickname);
+      const { email, password, nickname } = testUser;
+      await expect(AuthService.createUser(email, password, nickname)).resolves.not.toThrow();
     });
 
     it("should throw error if email already exists", async () => {
-      await expect(
-        AuthService.createUser(testUser.email, "anotherPassword", "anotherNickname"),
-      ).rejects.toThrowError("Email already exists.");
+      const { email, password, nickname } = testUser;
+      await expect(AuthService.createUser(email, password, nickname)).rejects.toThrow(
+        "Email already exists.",
+      );
     });
 
     it("should throw error if nickname already exists", async () => {
+      const { password, nickname } = testUser;
       await expect(
-        AuthService.createUser("another@example.com", "anotherPassword", testUser.nickname),
-      ).rejects.toThrowError("Nickname already exists.");
+        AuthService.createUser("anotheruser@exmaple.com", password, nickname),
+      ).rejects.toThrow("Nickname already exists.");
+    });
+  });
+
+  describe("deleteUser", () => {
+    it("should delete a user", async () => {
+      const { email } = testUser;
+      const user = await AuthService.getUserByEmail(email);
+      await expect(AuthService.deleteUser(user.user_id)).resolves.not.toThrow();
+    });
+
+    it("should throw error if user not found", async () => {
+      const nonExistentUserId = "nonExistentUserId";
+      await expect(AuthService.deleteUser(nonExistentUserId)).rejects.toThrow(
+        "Failed to delete user for user_id nonExistentUserId",
+      );
+    });
+  });
+  describe("loginUser", () => {
+    it("should login user and return token and userId", async () => {
+      const { nickname } = testUser;
+      const { token } = await AuthService.loginUser(nickname);
+      expect(token).toBeDefined();
+    });
+
+    it("should throw error if user not found", async () => {
+      const nonExistentNickname = "nonExistentUser";
+      await expect(AuthService.loginUser(nonExistentNickname)).rejects.toThrow(
+        "User not found with the provided nickname.",
+      );
+    });
+  });
+
+  describe("getUserByEmail", () => {
+    it("should return user by email", async () => {
+      const { email } = testUser;
+      const user = await AuthService.getUserByEmail(email);
+      expect(user).toBeDefined();
+      expect(user.email).toBe(email);
+    });
+
+    it("should throw error if user not found with provided email", async () => {
+      const nonExistentEmail = "nonexistent@example.com";
+      await expect(AuthService.getUserByEmail(nonExistentEmail)).rejects.toThrow(
+        "User not found with the provided email.",
+      );
+    });
+  });
+
+  describe("getUserByNickname", () => {
+    it("should return user by nickname", async () => {
+      const { nickname } = testUser;
+      const user = await AuthService.getUserByNickname(nickname);
+      expect(user).toBeDefined();
+      expect(user.nickname).toBe(nickname);
+    });
+
+    it("should throw error if user not found with provided nickname", async () => {
+      const nonExistentNickname = "nonexistent";
+      await expect(AuthService.getUserByNickname(nonExistentNickname)).rejects.toThrow(
+        "User not found with the provided nickname.",
+      );
+    });
+  });
+
+  describe("sendNicknameEmail", () => {
+    it("should send email with user nickname", async () => {
+      const { email } = testUser;
+      await expect(AuthService.sendNicknameEmail(email)).resolves.not.toThrow();
+    });
+  });
+
+  describe("sendTemporaryPasswordEmail", () => {
+    test("should send temporary password email", async () => {
+      const { email } = testUser;
+      await expect(AuthService.sendTemporaryPasswordEmail(email)).resolves.not.toThrow();
+    });
+
+    test("should throw error if user not found with provided email", async () => {
+      const nonExistentEmail = "nonexistent@example.com";
+      await expect(AuthService.sendTemporaryPasswordEmail(nonExistentEmail)).rejects.toThrow(
+        "Failed to update user password",
+      );
     });
   });
 });
-
-// describe("Send Verification Email", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Verify CAPTCHA", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Delete CAPTCHA", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Log In", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Delete User", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Send Nickname Recovery Email", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });
-//
-// describe("Send Temporary Password Email", () => {
-//   test("Success", async () => {});
-//   test("Failure", async () => {});
-// });

@@ -37,8 +37,8 @@ class AuthController {
     const { nickname } = req.body;
     try {
       const user = await authService.loginUser(nickname);
-      const { token, userId } = user;
-      res.status(200).json({ token, userId });
+      const { token } = user;
+      res.status(200).json({ token });
     } catch (error) {
       next(error);
     }
