@@ -27,16 +27,14 @@ class AuthController {
     }
   }
 
-  async createUser(req, res) {
+  async createUser(req, res, next) {
     const { email, password, nickname } = req.body;
-
     try {
       await authService.createUser(email, password, nickname);
       await authService.deleteVerificationCode(email);
       res.status(201).json({ message: "User created successfully!" });
     } catch (error) {
-      logger.error(error.message);
-      res.status(500).json({ error: "Internal server error during user creation." });
+      return next(error);
     }
   }
 
