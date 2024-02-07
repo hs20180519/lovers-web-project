@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 class DiaryService {
   async createDiaryPost(title, content, loverId, userId, postDate) {
-    return prisma.diary_posts.create({
+    await prisma.diary_posts.create({
       data: {
         title,
         content,
@@ -15,7 +15,7 @@ class DiaryService {
   }
 
   async updateDiaryPost(title, content, diaryPostId, postDate) {
-    return prisma.diary_posts.update({
+    await prisma.diary_posts.update({
       where: {
         diary_post_id: diaryPostId,
       },
@@ -28,12 +28,12 @@ class DiaryService {
   }
 
   async deleteDiaryPost(diaryPostId) {
-    return prisma.diary_posts.delete({
+    await prisma.diary_posts.delete({
       where: { diary_post_id: diaryPostId },
     });
   }
   async getMonthlyDiaryPosts(loverId, year, month) {
-    return prisma.diary_posts.findMany({
+    await prisma.diary_posts.findMany({
       where: {
         lover_id: loverId,
         post_date: {
