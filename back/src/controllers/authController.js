@@ -7,7 +7,8 @@ class AuthController {
     const { email } = req.body;
     //이메일 중복이면 아예 이메일 발송 못하도록 수정
     try {
-      await authService.sendVerificationEmail(email);
+      const verificationCode = await authService.sendVerificationEmail(email);
+      await authService.createVerificationCode(verificationCode);
       res.status(200).json({ message: "Verification email sent successfully." });
     } catch (error) {
       logger.error("Error during sendVerificationEmail", error);
@@ -18,17 +19,7 @@ class AuthController {
   async confirmEmailCode(req, res) {
     const { email, verificationCode } = req.body;
     try {
-      const user = await authService.confirmEmailCode(email, verificationCode);
-      if (user === null) {
-        return res.status(404).json({
-          error: "Verification code not found for the provided email.",
-        });
-      }
-      if (user === false) {
-        return res.status(400).json({
-          error: "Incorrect verification code.",
-        });
-      }
+      await authService.confirmEmailCode(email, verificationCode);
       res.status(200).json({ message: "Email verification successful." });
     } catch (error) {
       logger.error("Error during confirmEmailCode", error);
@@ -44,7 +35,7 @@ class AuthController {
       await authService.deleteVerificationCode(email);
       res.status(201).json({ message: "User created successfully!" });
     } catch (error) {
-      logger.error("Error during createUser", error);
+      logger.error(error.message);
       res.status(500).json({ error: "Internal server error during user creation." });
     }
   }
