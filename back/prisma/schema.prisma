@@ -28,6 +28,7 @@ model comments {
   content       String      @db.VarChar(127)
   create_date   DateTime    @db.DateTime(0)
   diary_posts   diary_posts @relation(fields: [diary_post_id], references: [diary_post_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-comments-posts")
+
   @@index([diary_post_id], map: "fk_comments_post_id_idx")
 }
 
@@ -49,12 +50,12 @@ model diary_posts {
 }
 
 model gallery_photos {
-  gallery_photo_id Int    @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
-  lover_id        Int
-  image_path       String @db.VarChar(255)
-  photo_date       DateTime   @db.DateTime(0)
-  liked_count     Int?
-  lovers          lovers @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-gallerys-lovers")
+  gallery_photo_id Int      @id @unique(map: "gallery_id_UNIQUE") @default(autoincrement())
+  lover_id         Int
+  image_path       String   @db.VarChar(255)
+  photo_date       DateTime @db.DateTime(0)
+  liked_count      Int?
+  lovers           lovers   @relation(fields: [lover_id], references: [lover_id], onDelete: Cascade, onUpdate: NoAction, map: "fk-gallerys-lovers")
 
   @@index([lover_id], map: "fk-gallerys-lovers_idx")
 }
@@ -71,27 +72,19 @@ model lovers {
 }
 
 model verifications {
-  verification_id               Int                  @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
-  email                          String              @db.VarChar(30)
-  verification_code             String               @db.VarChar(10)
+  verification_id   Int    @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
+  email             String @db.VarChar(30) @unique
+  verification_code String @db.VarChar(10)
 }
+
 model users {
   user_id                        Int                  @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
   email                          String               @unique(map: "email_UNIQUE") @db.VarChar(30)
   password                       String               @db.VarChar(60)
   profile_image                  String?              @db.VarChar(255)
   nickname                       String               @unique(map: "nickname_UNIQUE") @db.VarChar(30)
-  lover_nickname                 String?              @db.VarChar(10)
   account_book_posts             account_book_posts[]
   diary_posts                    diary_posts[]
   lovers_lovers_user_a_idTousers lovers?              @relation("lovers_user_a_idTousers")
   lovers_lovers_user_b_idTousers lovers?              @relation("lovers_user_b_idTousers")
-}
-
-model pairing_requests {
-  pairing_request_id         Int       @id @unique(map: "pairing_request_id_UNIQUE") @default(autoincrement())
-  apply_user_email           String    @unique(map: "apply_user_email_UNIQUE") @db.VarChar(30)
-  accept_user_email          String    @unique(map: "accept_user_email_UNIQUE") @db.VarChar(30)
-  is_applied                 Int       @db.TinyInt
-  is_accepted                Int       @db.TinyInt
 }
