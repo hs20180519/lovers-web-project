@@ -154,13 +154,10 @@ class AuthService {
 
     //비밀번호 변경
     const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
-    const user = await prisma.users.update({
+    await prisma.users.update({
       where: { email },
       data: { password: hashedPassword },
     });
-    if (!user) {
-      throw new Error("Failed to update user password");
-    }
   }
 }
 
