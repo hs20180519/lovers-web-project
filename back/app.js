@@ -12,7 +12,7 @@ const commentRouter = require("./src/routes/commentRouter");
 const galleryRouter = require("./src/routes/galleryRouter");
 const errorHandler = require("./src/middlewares/errorHandler");
 
-dotenv.config(); //.env 파일의 환경 변수 로드
+dotenv.config(); //.gitignore 파일의 환경 변수 로드
 
 const indexRouter = require("./src/routes");
 
