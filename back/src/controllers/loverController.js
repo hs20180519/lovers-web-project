@@ -6,7 +6,7 @@ class LoverController {
     const { userAId, userBId } = req.body;
     try {
       await loverService.makeLoverId(userAId, userBId);
-      res.status(201).json({ message: "Lover successfully make!" });
+      res.status(201).json({ message: "Lover successfully created!" });
     } catch (error) {
       next(error);
     }
@@ -19,7 +19,7 @@ class LoverController {
     const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
     try {
       await loverService.makeLoverId(userAId, userBId);
-      res.status(201).json({ message: "Lover successfully make!" });
+      res.status(201).json({ message: "Lover successfully created!" });
     } catch (error) {
       next(error);
     }
@@ -63,7 +63,7 @@ class LoverController {
     const { loverNickname } = req.body;
     try {
       await loverService.makeLoverNickname(userId, loverNickname);
-      res.status(201).json({ messages: "Lover nickname successfully make!" });
+      res.status(201).json({ messages: "Lover nickname successfully created!" });
     } catch (error) {
       next(error);
     }
