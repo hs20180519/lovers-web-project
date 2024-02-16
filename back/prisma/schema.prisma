@@ -73,7 +73,7 @@ model lovers {
 
 model verifications {
   verification_id   Int    @id @unique(map: "user_id_UNIQUE") @default(autoincrement())
-  email             String @db.VarChar(30) @unique
+  email             String @db.VarChar(30)
   verification_code String @db.VarChar(10)
 }
 
@@ -83,8 +83,17 @@ model users {
   password                       String               @db.VarChar(60)
   profile_image                  String?              @db.VarChar(255)
   nickname                       String               @unique(map: "nickname_UNIQUE") @db.VarChar(30)
+  lover_nickname                 String?              @db.VarChar(10)
   account_book_posts             account_book_posts[]
   diary_posts                    diary_posts[]
   lovers_lovers_user_a_idTousers lovers?              @relation("lovers_user_a_idTousers")
   lovers_lovers_user_b_idTousers lovers?              @relation("lovers_user_b_idTousers")
+}
+
+model pairing_requests {
+  pairing_request_id Int    @id @unique(map: "pairing_request_id_UNIQUE") @default(autoincrement())
+  apply_user_email   String @unique(map: "apply_user_email_UNIQUE") @db.VarChar(30)
+  accept_user_email  String @unique(map: "accept_user_email_UNIQUE") @db.VarChar(30)
+  is_accepted        Int    @db.TinyInt
+  is_applied         Int    @db.TinyInt
 }
