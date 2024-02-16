@@ -5,8 +5,8 @@ class LoverController {
   async temporalMakeLoverId(req, res, next) {
     const { userAId, userBId } = req.body;
     try {
-      const result = await loverService.makeLoverId(userAId, userBId);
-      res.status(201).json({ result });
+      await loverService.makeLoverId(userAId, userBId);
+      res.status(201).json({ message: "Lover successfully make!" });
     } catch (error) {
       next(error);
     }
@@ -18,8 +18,8 @@ class LoverController {
     const userAId = await loverService.getUserIdByEmail(applyUserEmail);
     const userBId = await loverService.getUserIdByEmail(acceptUserEmail);
     try {
-      const result = await loverService.makeLoverId(userAId, userBId);
-      res.status(201).json({ result });
+      await loverService.makeLoverId(userAId, userBId);
+      res.status(201).json({ message: "Lover successfully make!" });
     } catch (error) {
       next(error);
     }
@@ -29,8 +29,8 @@ class LoverController {
     const applyUserEmail = req.user.email;
     const { acceptUserEmail } = req.body;
     try {
-      const result = await loverService.applyLoverByEmail(applyUserEmail, acceptUserEmail);
-      res.status(201).json({ result });
+      await loverService.applyLoverByEmail(applyUserEmail, acceptUserEmail);
+      res.status(201).json({ message: "Lover application with email successfully completed!" });
     } catch (error) {
       next(error);
     }
@@ -62,8 +62,8 @@ class LoverController {
     const userId = req.user.user_id;
     const { loverNickname } = req.body;
     try {
-      const result = await loverService.makeLoverNickname(userId, loverNickname);
-      res.status(201).json({ result });
+      await loverService.makeLoverNickname(userId, loverNickname);
+      res.status(201).json({ messages: "Lover nickname successfully make!" });
     } catch (error) {
       next(error);
     }
