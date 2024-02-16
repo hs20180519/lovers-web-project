@@ -2,18 +2,17 @@ const loverService = require("../services/loverService");
 const logger = require("../config/logger");
 
 class LoverController {
-  async temporalMakeLoverId(req, res) {
+  async temporalMakeLoverId(req, res, next) {
     const { userAId, userBId } = req.body;
     try {
       const result = await loverService.makeLoverId(userAId, userBId);
       res.status(201).json({ result });
     } catch (error) {
-      logger.error("Error during temporalMakeLoverId", error);
-      res.status(500).json({ error: "Internal server error during making temporal loverId" });
+      next(error);
     }
   }
 
-  async makeLoverId(req, res) {
+  async makeLoverId(req, res, next) {
     const acceptUserEmail = req.user.email;
     const { applyUserEmail } = req.body;
     const userAId = await loverService.getUserIdByEmail(applyUserEmail);
@@ -22,20 +21,18 @@ class LoverController {
       const result = await loverService.makeLoverId(userAId, userBId);
       res.status(201).json({ result });
     } catch (error) {
-      logger.error("Error during makeLoverId", error);
-      res.status(500).json({ error: "Internal server error during making loverId" });
+      next(error);
     }
   }
 
-  async applyLoverByEmail(req, res) {
+  async applyLoverByEmail(req, res, next) {
     const applyUserEmail = req.user.email;
     const { acceptUserEmail } = req.body;
     try {
       const result = await loverService.applyLoverByEmail(applyUserEmail, acceptUserEmail);
       res.status(201).json({ result });
     } catch (error) {
-      logger.error("Error during applyLoverByEmail", error);
-      res.status(500).json({ error: "Internal server error during applying lover by email" });
+      next(error);
     }
   }
 
@@ -47,31 +44,28 @@ class LoverController {
       await loverService.deletePairingRequest(applyUserEmail, acceptUserEmail);
       next();
     } catch (error) {
-      logger.error("Error during acceptLoverByEmail", error);
-      res.status(500).json({ error: "Internal server error during accepting lover by email" });
+      next(error);
     }
   }
 
-  async deleteLoverByUserId(req, res) {
+  async deleteLoverByUserId(req, res, next) {
     const userId = req.user.user_id;
     try {
       await loverService.deleteLoverByUserId(userId);
       res.status(204).json();
     } catch (error) {
-      logger.error("Error during deleteLoverByUserId");
-      res.status(500).json({ error: "Internal server error during deleting lover by user id" });
+      next(error);
     }
   }
 
-  async makeLoverNickname(req, res) {
+  async makeLoverNickname(req, res, next) {
     const userId = req.user.user_id;
     const { loverNickname } = req.body;
     try {
       const result = await loverService.makeLoverNickname(userId, loverNickname);
       res.status(201).json({ result });
     } catch (error) {
-      logger.error("Error during makeLoverNickname");
-      res.status(500).json({ error: "Internal server error during making lover nickname" });
+      next(error);
     }
   }
 }
