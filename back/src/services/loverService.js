@@ -3,97 +3,93 @@ const prisma = new PrismaClient();
 
 class LoverService {
   async makeLoverId(userAId, userBId) {
-    try {
-      return await prisma.lovers.create({
-        data: {
-          user_a_id: userAId,
-          user_b_id: userBId,
-        },
-      });
-    } catch (error) {
-      throw error;
+    const loverInformation = await prisma.lovers.create({
+      data: {
+        user_a_id: userAId,
+        user_b_id: userBId,
+      },
+    });
+    if (!loverInformation) {
+      throw new Error("Failed to create lover");
     }
   }
 
   async getUserIdByEmail(email) {
-    try {
-      const user = await prisma.users.findUnique({
-        where: { email },
-      });
-      return user.user_id;
-    } catch (error) {
-      throw error;
+    const user = await prisma.users.findUnique({
+      where: { email },
+    });
+    if (!user) {
+      throw new Error("User not found with the provided email");
     }
+    return user.user_id;
   }
 
   async applyLoverByEmail(applyUserEmail, acceptUserEmail) {
-    try {
-      return await prisma.pairing_requests.create({
-        data: {
-          apply_user_email: applyUserEmail,
-          accept_user_email: acceptUserEmail,
-          is_applied: 1,
-          is_accepted: 0,
-        },
-      });
-    } catch (error) {
-      throw error;
+    const applyLoverInformation = await prisma.pairing_requests.create({
+      data: {
+        apply_user_email: applyUserEmail,
+        accept_user_email: acceptUserEmail,
+        is_applied: 1,
+        is_accepted: 0,
+      },
+    });
+    if (!applyLoverInformation) {
+      throw new Error("Failed to apply lover by email");
     }
   }
 
   async acceptLoverByEmail(applyUserEmail, acceptUserEmail) {
-    try {
-      await prisma.pairing_requests.update({
-        where: {
-          apply_user_email: applyUserEmail,
-          accept_user_email: acceptUserEmail,
-        },
-        data: {
-          is_accepted: 1,
-        },
-      });
-    } catch (error) {
-      throw error;
+    const acceptLoverInformation = await prisma.pairing_requests.update({
+      where: {
+        apply_user_email: applyUserEmail,
+        accept_user_email: acceptUserEmail,
+      },
+      data: {
+        is_accepted: 1,
+      },
+    });
+    if (!acceptLoverInformation) {
+      throw new Error("Failed to accept lover by email");
     }
   }
 
   async deletePairingRequest(applyUserEmail, acceptUserEmail) {
-    try {
-      await prisma.pairing_requests.delete({
+    await prisma.pairing_requests
+      .delete({
         where: {
           apply_user_email: applyUserEmail,
           accept_user_email: acceptUserEmail,
         },
+      })
+      .catch(() => {
+        throw new Error("Failed to delete pairing request");
       });
-    } catch (error) {
-      throw error;
-    }
   }
 
   async deleteLoverByUserId(userId) {
-    try {
-      await prisma.lovers.deleteMany({
+    await prisma.lovers
+      .deleteMany({
         where: {
           OR: [{ user_a_id: userId }, { user_b_id: userId }],
         },
+      })
+      .catch(() => {
+        throw new Error(`Failed to delete lover for user_id ${userId}`);
       });
-    } catch (error) {
-      throw error;
-    }
+    await prisma.users.update({ where: { user_id: userId }, data: { lover_nickname: null } });
   }
 
   async makeLoverNickname(userId, loverNickname) {
-    try {
-      return await prisma.users.update({
-        where: {
-          user_id: userId,
-        },
-        data: {
-          lover_nickname: loverNickname,
-        },
-      });
-    } catch (error) {
-      throw error;
+    const loverNicknameInformation = await prisma.users.update({
+      where: {
+        user_id: userId,
+      },
+      data: {
+        lover_nickname: loverNickname,
+      },
+    });
+    if (!loverNicknameInformation) {
+      throw new Error("Failed to make lover nickname");
     }
   }
 }
