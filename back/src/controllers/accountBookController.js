@@ -3,11 +3,11 @@ const logger = require("../config/logger");
 const { use } = require("passport");
 
 class AccountBookController {
-  async createAccountBook(req, res) {
+  async createAccountBook(req, res, next) {
     const userId = req.user.user_id;
     const { loverId, category, amount, useDate, content } = req.body;
     try {
-      const user = await accountBookService.createAccountBook(
+      await accountBookService.createAccountBook(
         loverId,
         userId,
         category,
@@ -15,25 +15,23 @@ class AccountBookController {
         useDate,
         content,
       );
-      res.status(201).json({ user });
+      res.status(201).json({ message: "Account book successfully created!" });
     } catch (error) {
-      logger.error("Error during creatAccountBook", error);
-      res.status(500).json({ error: "Internal server error during creating accountBook" });
+      next(error);
     }
   }
 
-  async deleteAccountBookById(req, res) {
+  async deleteAccountBookById(req, res, next) {
     const { accountBookPostId } = req.params;
     try {
       await accountBookService.deleteAccountBookById(Number(accountBookPostId));
       res.status(204).send();
     } catch (error) {
-      logger.error("Error during deleteAccountBook", error);
-      res.status(500).json({ error: "Internal server error during deleting accountBook" });
+      next(error);
     }
   }
 
-  async getAccountBooksByDate(req, res) {
+  async getAccountBooksByDate(req, res, next) {
     const loverId = req.params.lover_id;
     const { year, month } = req.query;
     try {
@@ -44,25 +42,23 @@ class AccountBookController {
       );
       res.status(200).json(accountBookPosts);
     } catch (error) {
-      logger.error("Error during getAccountBooks", error);
-      res.status(500).json({ error: "Internal server error during getting accountBooks" });
+      next(error);
     }
   }
 
   async updateAccountBookPost(req, res) {
     const { accountBookPostId, category, amount, useDate, content } = req.body;
     try {
-      const post = await accountBookService.updateAccountBookPost(
+      await accountBookService.updateAccountBookPost(
         accountBookPostId,
         category,
         amount,
         useDate,
         content,
       );
-      res.status(200).json({ post });
+      res.status(200).json({ message: "Account book successfully updated!" });
     } catch (error) {
-      logger.error("Error during updateAccountBookPost", error);
-      res.status(500).json({ error: "Internal server error during updating accountBookPost" });
+      next(error);
     }
   }
 }
