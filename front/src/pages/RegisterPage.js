@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { Grid, Typography, TextField, Button } from "@mui/material";
 import {
   confirmEmailCode,
@@ -8,6 +9,7 @@ import {
 
 function RegisterPage() {
   const [nickname, setNickname] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,6 +23,7 @@ function RegisterPage() {
     const nicknameRegex = /^[A-Za-z0-9]{5,}$/;
     return nicknameRegex.test(nickname);
   };
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

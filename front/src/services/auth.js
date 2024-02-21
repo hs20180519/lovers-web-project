@@ -2,6 +2,7 @@ import axios from "axios";
 
 const serverUrl = `http://localhost:3000`;
 
+
 // 이메일 보내기 API 호출
 export const sendVerificationEmail = async (email) => {
   try {

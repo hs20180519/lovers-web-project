@@ -26,12 +26,22 @@ function MainPage() {
         </Button>
         <Button
           component={Link}
-          to="/signup"
+          to="/auth/register"
           variant="contained"
           color="primary"
+          sx={{ marginRight: "10px" }}
         >
           회원가입
         </Button>
+        <Button
+          component={Link}
+          to="/accountbook/posts"
+          variant="outlined"
+          color="secondary"
+        >
+          가계부
+        </Button>
+
       </Grid>
     </Grid>
   );
