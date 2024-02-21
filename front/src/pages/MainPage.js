@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Typography, Button } from "@mui/material"; // @material-ui/core에서 @mui/material로 변경
 import { Link } from "react-router-dom";
 
 function MainPage() {
@@ -17,10 +17,10 @@ function MainPage() {
       <Grid item xs={4} container justifyContent="flex-end" alignItems="center">
         <Button
           component={Link}
-          to="/login"
+          to="/auth/login"
           variant="outlined"
           color="primary"
-          style={{ marginRight: "10px" }}
+          sx={{ marginRight: "10px" }} // style prop을 sx prop으로 변경
         >
           로그인
         </Button>

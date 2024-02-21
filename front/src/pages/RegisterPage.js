@@ -1,25 +1,47 @@
 import React, { useState } from "react";
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import { Grid, Typography, TextField, Button } from "@mui/material"; // @material-ui/core에서 @mui/material로 변경
 
-function SignupPage() {
+function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
-  const handleSignup = () => {
-    // 회원가입 로직 구현
-    // 이메일 인증 및 회원가입 처리
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isConfirmPasswordValid, setConfirmPasswordValid] = useState(true);
+
+  const handleSignup = () => {};
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  const handleSendVerificationCode = () => {
-    // 이메일로 인증코드 전송하는 로직
+  const validatePassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordRegex.test(password);
   };
+
+  const handleSendVerificationCode = () => {};
 
   const handleConfirmPassword = () => {
     if (password !== confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
     }
+  };
+
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setIsEmailValid(validateEmail(emailValue));
+    setEmail(emailValue);
+  };
+
+  const handlePasswordChange = (e) => {
+    const passwordValue = e.target.value;
+    setIsPasswordValid(validatePassword(passwordValue));
+    setPassword(passwordValue);
   };
 
   return (
@@ -32,7 +54,9 @@ function SignupPage() {
           label="이메일"
           fullWidth
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
+          error={!isEmailValid}
+          helperText={!isEmailValid ? "유효한 이메일을 입력해주세요" : ""}
         />
       </Grid>
       <Grid item xs={12}>
@@ -41,7 +65,13 @@ function SignupPage() {
           type="password"
           fullWidth
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
+          error={!isPasswordValid}
+          helperText={
+            !isPasswordValid
+              ? "비밀번호는 8글자 이상, 영어와 숫자, 특수문자가 반드시 하나 이상 포함되어야 합니다."
+              : ""
+          }
         />
       </Grid>
       <Grid item xs={12}>
@@ -80,4 +110,4 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default RegisterPage;
