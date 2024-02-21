@@ -13,6 +13,7 @@ function App() {
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
         <Route path="/accountbook/posts" element={<AccountBookPage />} />
+
       </Routes>
     </Router>
   );

@@ -41,6 +41,7 @@ function MainPage() {
         >
           가계부
         </Button>
+
       </Grid>
     </Grid>
   );

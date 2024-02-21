@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Grid, Typography, TextField, Button, Link } from "@mui/material"; // @material-ui/core에서 @mui/material로 변경
+
+import { Grid, Typography, TextField, Button, Link } from "@mui/material";
+
 import { loginUser } from "../services/auth";
 
 function LoginPage() {
@@ -49,7 +51,9 @@ function LoginPage() {
       <Grid item xs={12}>
         <Button
           component={Link} // Link 컴포넌트를 Mui의 Link로 변경
-          href="/register" // to prop을 href로 변경
+
+          href="/auth/register" // to prop을 href로 변경
+
           variant="outlined"
           color="primary"
         >
