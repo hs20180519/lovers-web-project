@@ -9,7 +9,7 @@ function RegisterPage() {
 
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isConfirmPasswordValid, setConfirmPasswordValid] = useState(true);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
 
   const handleSignup = () => {};
 
@@ -26,12 +26,6 @@ function RegisterPage() {
 
   const handleSendVerificationCode = () => {};
 
-  const handleConfirmPassword = () => {
-    if (password !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다.");
-    }
-  };
-
   const handleEmailChange = (e) => {
     const emailValue = e.target.value;
     setIsEmailValid(validateEmail(emailValue));
@@ -42,6 +36,14 @@ function RegisterPage() {
     const passwordValue = e.target.value;
     setIsPasswordValid(validatePassword(passwordValue));
     setPassword(passwordValue);
+    // 비밀번호를 변경할 때 확인 비밀번호를 초기화
+    setConfirmPassword("");
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const confirmPasswordValue = e.target.value;
+    setConfirmPassword(confirmPasswordValue);
+    setIsConfirmPasswordValid(password === confirmPasswordValue);
   };
 
   return (
@@ -80,8 +82,11 @@ function RegisterPage() {
           type="password"
           fullWidth
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          onBlur={handleConfirmPassword}
+          onChange={handleConfirmPasswordChange}
+          error={!isConfirmPasswordValid}
+          helperText={
+            !isConfirmPasswordValid ? "비밀번호가 일치하지 않습니다." : ""
+          }
         />
       </Grid>
       <Grid item xs={12}>
