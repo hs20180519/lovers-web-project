@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { Grid, Typography, TextField, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import { loginUser } from "../services/auth";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,6 +16,7 @@ function LoginPage() {
       const response = await loginUser(username, password);
       // 로그인 성공 시 처리
       console.log("로그인 성공:", response);
+      navigate("/account/users");
       // 페이지 이동 등 필요한 작업 수행
     } catch (error) {
       // 로그인 실패 시 처리
