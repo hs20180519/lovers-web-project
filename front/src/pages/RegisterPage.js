@@ -15,10 +15,10 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [isNicknameValid, setIsNicknameValid] = useState(true);
   const validateNickname = (nickname) => {
     const nicknameRegex = /^[A-Za-z0-9]{5,}$/;
     return nicknameRegex.test(nickname);
