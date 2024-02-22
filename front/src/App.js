@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AccountBookPage from "./pages/AccountBookPage";
+import UserPage from "./pages/UserPage";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
         <Route path="/accountbook/posts" element={<AccountBookPage />} />
-
+        <Route path="/account/users" element={<UserPage />} />
       </Routes>
     </Router>
   );

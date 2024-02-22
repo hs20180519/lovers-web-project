@@ -41,7 +41,15 @@ function MainPage() {
         >
           가계부
         </Button>
-
+        <Button
+          component={Link}
+          to="/account/users"
+          variant="outlined"
+          color="primary"
+          sx={{ marginRight: "10px" }} // style prop을 sx prop으로 변경
+        >
+          마이페이지
+        </Button>
       </Grid>
     </Grid>
   );
