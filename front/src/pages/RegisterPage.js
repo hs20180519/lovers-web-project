@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Grid, Typography, TextField, Button } from "@mui/material";
+import { Grid, Typography, TextField, Button, Box } from "@mui/material";
 import {
   confirmEmailCode,
   createUser,
@@ -100,106 +100,126 @@ function RegisterPage() {
     }
   };
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography variant="h4">회원가입</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="아이디"
-          fullWidth
-          value={nickname}
-          onChange={handleNicknameChange}
-          error={!isNicknameValid}
-          helperText={
-            !isNicknameValid
-              ? "아이디는 5글자 이상, 영어와 숫자만 허용됩니다."
-              : ""
-          }
-        />
-      </Grid>
-      <Grid item xs={12} container alignItems="flex-end">
-        <Grid item xs={11}>
+    <Grid
+      container
+      spacing={3}
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Grid item xs={10}>
+        <Box p={3}>
+          <Typography variant="h4" align="center" gutterBottom>
+            회원가입
+          </Typography>
           <TextField
-            label="이메일"
+            label="아이디"
             fullWidth
-            value={email}
-            onChange={handleEmailChange}
-            error={!isEmailValid}
-            helperText={!isEmailValid ? "유효한 이메일을 입력해주세요" : ""}
+            value={nickname}
+            onChange={handleNicknameChange}
+            error={!isNicknameValid}
+            helperText={
+              !isNicknameValid
+                ? "아이디는 5글자 이상, 영어와 숫자만 허용됩니다."
+                : ""
+            }
           />
-        </Grid>
-        <Grid item xs={1}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleSendVerificationCode}
-          >
-            메일 보내기
-          </Button>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} container alignItems="flex-end">
-        <Grid item xs={11}>
-          <TextField
-            label="인증번호"
-            fullWidth
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={1}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleConfirmVerificationCode}
-          >
-            확인
-          </Button>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="비밀번호"
-          type="password"
-          fullWidth
-          value={password}
-          onChange={handlePasswordChange}
-          error={!isPasswordValid}
-          helperText={
-            !isPasswordValid
-              ? "비밀번호는 8글자 이상, 영어와 숫자, 특수문자가 반드시 하나 이상 포함되어야 합니다."
-              : ""
-          }
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="비밀번호 확인"
-          type="password"
-          fullWidth
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-          error={!isConfirmPasswordValid}
-          helperText={
-            !isConfirmPasswordValid ? "비밀번호가 일치하지 않습니다." : ""
-          }
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSignup}
-          disabled={
-            !isNicknameValid ||
-            !isEmailValid ||
-            !isPasswordValid ||
-            !isConfirmPasswordValid
-          }
-        >
-          회원가입
-        </Button>
+          <Box mt={2}>
+            <Grid container spacing={1} alignItems="flex-end">
+              <Grid item xs={10}>
+                <TextField
+                  label="이메일"
+                  fullWidth
+                  value={email}
+                  onChange={handleEmailChange}
+                  error={!isEmailValid}
+                  helperText={
+                    !isEmailValid ? "유효한 이메일을 입력해주세요" : ""
+                  }
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleSendVerificationCode}
+                  size="large"
+                  style={{ width: "100%" }}
+                >
+                  메일 보내기
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+          <Box mt={2}>
+            <Grid container spacing={1} alignItems="flex-end">
+              <Grid item xs={10}>
+                <TextField
+                  label="인증번호"
+                  fullWidth
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleConfirmVerificationCode}
+                  size="large"
+                  style={{ width: "100%" }}
+                >
+                  확인
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+          <Box mt={2}>
+            <TextField
+              label="비밀번호"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={handlePasswordChange}
+              error={!isPasswordValid}
+              helperText={
+                !isPasswordValid
+                  ? "비밀번호는 8글자 이상, 영어와 숫자, 특수문자가 반드시 하나 이상 포함되어야 합니다."
+                  : ""
+              }
+            />
+          </Box>
+          <Box mt={2}>
+            <TextField
+              label="비밀번호 확인"
+              type="password"
+              fullWidth
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              error={!isConfirmPasswordValid}
+              helperText={
+                !isConfirmPasswordValid ? "비밀번호가 일치하지 않습니다." : ""
+              }
+            />
+          </Box>
+          <Box mt={2} textAlign="center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSignup}
+              disabled={
+                !isNicknameValid ||
+                !isEmailValid ||
+                !isPasswordValid ||
+                !isConfirmPasswordValid
+              }
+              size="large"
+              style={{ width: "30%" }}
+            >
+              회원가입
+            </Button>
+          </Box>
+        </Box>
       </Grid>
     </Grid>
   );
