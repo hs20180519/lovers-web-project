@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { Grid, Typography, TextField, Button, Link } from "@mui/material";
+import { Grid, Typography, TextField, Button, Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import { loginUser } from "../services/auth";
 
@@ -22,54 +23,74 @@ function LoginPage() {
   };
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography variant="h4">로그인</Typography>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="아이디"
-          fullWidth
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label="비밀번호"
-          type="password"
-          fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={handleLogin}>
-          로그인
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <Button
-          component={Link} // Link 컴포넌트를 Mui의 Link로 변경
-
-          href="/auth/register" // to prop을 href로 변경
-
-          variant="outlined"
-          color="primary"
-        >
-          회원가입
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <Button variant="contained" color="primary">
-          구글 로그인
-        </Button>
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="body2">
-          <Link href="#">아이디 찾기</Link> |{" "}
-          <Link href="#">비밀번호 찾기</Link> | <Link href="#">회원가입</Link>
-        </Typography>
+    <Grid
+      container
+      spacing={3}
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "100vh", maxWidth: "600px", margin: "0 auto" }}
+    >
+      <Grid item xs={10}>
+        <Box p={3} border={1} borderRadius={4} borderColor="lightgray">
+          <Typography variant="h4" align="center" gutterBottom>
+            로그인
+          </Typography>
+          <TextField
+            label="아이디"
+            fullWidth
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Box mt={2}>
+            <TextField
+              label="비밀번호"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Box>
+          <Box mt={2} textAlign="center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleLogin}
+              size="large"
+              style={{ width: "100%" }}
+            >
+              로그인
+            </Button>
+          </Box>
+          <Box mt={2} textAlign="center">
+            <Button
+              component={Link}
+              to="/auth/register"
+              variant="outlined"
+              color="primary"
+              size="large"
+              style={{ width: "100%" }}
+            >
+              회원가입
+            </Button>
+          </Box>
+          <Box mt={2} textAlign="center">
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              style={{ width: "100%" }}
+            >
+              구글 로그인
+            </Button>
+          </Box>
+          <Box mt={2} textAlign="center">
+            <Typography variant="body2">
+              <Link to="#">아이디 찾기</Link> |{" "}
+              <Link to="#">비밀번호 찾기</Link> |{" "}
+              <Link to={"/auth/register"}>회원가입</Link>
+            </Typography>
+          </Box>
+        </Box>
       </Grid>
     </Grid>
   );

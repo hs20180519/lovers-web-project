@@ -216,7 +216,7 @@ function RegisterPage() {
                 !isConfirmPasswordValid
               }
               size="large"
-              style={{ width: "30%" }}
+              style={{ width: "100%" }}
             >
               회원가입
             </Button>
