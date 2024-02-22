@@ -9,7 +9,6 @@ import {
 
 function RegisterPage() {
   const [nickname, setNickname] = useState("");
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -105,10 +104,10 @@ function RegisterPage() {
       spacing={3}
       justifyContent="center"
       alignItems="center"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "100vh", maxWidth: "600px", margin: "0 auto" }}
     >
       <Grid item xs={10}>
-        <Box p={3}>
+        <Box p={3} border={1} borderRadius={4} borderColor="lightgray">
           <Typography variant="h4" align="center" gutterBottom>
             회원가입
           </Typography>
@@ -143,7 +142,7 @@ function RegisterPage() {
                   variant="outlined"
                   color="primary"
                   onClick={handleSendVerificationCode}
-                  size="large"
+                  size="small"
                   style={{ width: "100%" }}
                 >
                   메일 보내기
@@ -166,7 +165,7 @@ function RegisterPage() {
                   variant="outlined"
                   color="primary"
                   onClick={handleConfirmVerificationCode}
-                  size="large"
+                  size="small"
                   style={{ width: "100%" }}
                 >
                   확인
