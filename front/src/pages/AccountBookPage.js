@@ -10,15 +10,17 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+// import { createAccountBook } from "../services/accountBook";
 
 function AccountBookPage() {
   const [accountBook, setAccountBook] = useState([]);
   const [formData, setFormData] = useState({
-    date: "",
+    useDate: "",
     category: "",
     amount: "",
-    description: "",
+    content: "",
   });
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,12 +32,13 @@ function AccountBookPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // handleCreateAccountBook();
     setAccountBook((prevAccountBook) => [...prevAccountBook, formData]);
     setFormData({
-      date: "",
+      useDate: "",
       category: "",
       amount: "",
-      description: "",
+      content: "",
     });
   };
 
@@ -46,14 +49,50 @@ function AccountBookPage() {
   };
 
   const sortedAccountBook = accountBook.sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
+    (a, b) => new Date(a.useDate) - new Date(b.useDate)
   );
 
   const calculateTotalAmount = () => {
-    return accountBook.reduce(
-      (total, accountBook) => total + Number(accountBook.amount),
+    // 현재 월의 데이터만 필터링
+    const currentMonthData = accountBook.filter((item) => {
+      const itemDate = new Date(item.useDate);
+      return (
+        itemDate.getFullYear() === currentMonth.getFullYear() &&
+        itemDate.getMonth() === currentMonth.getMonth()
+      );
+    });
+
+    // 필터링된 데이터의 금액을 누적
+    return currentMonthData.reduce(
+      (total, item) => total + Number(item.amount),
       0
     );
+  };
+
+  // const handleCreateAccountBook = async () => {
+  //   try {
+  //     await createAccountBook(formData);
+  //     alert("가계부 추가에 성공했습니다.");
+  //   } catch (error) {
+  //     console.error("가계부 추가 실패: ", error.message);
+  //     alert("가계부 추가에 실패했습니다. 다시 시도해주세요.");
+  //   }
+  // };
+
+  const handlePrevMonth = () => {
+    setCurrentMonth((prevMonth) => {
+      const newMonth = new Date(prevMonth);
+      newMonth.setMonth(newMonth.getMonth() - 1);
+      return newMonth;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth((prevMonth) => {
+      const newMonth = new Date(prevMonth);
+      newMonth.setMonth(newMonth.getMonth() + 1);
+      return newMonth;
+    });
   };
 
   return (
@@ -68,10 +107,10 @@ function AccountBookPage() {
           <Grid item xs={2.5}>
             <TextField
               type="date"
-              id="date"
-              name="date"
+              id="useDate"
+              name="useDate"
               label="날짜"
-              value={formData.date}
+              value={formData.useDate}
               onChange={handleChange}
               InputLabelProps={{
                 shrink: true,
@@ -113,10 +152,10 @@ function AccountBookPage() {
           <Grid item xs={2.5}>
             <TextField
               type="text"
-              id="description"
-              name="description"
+              id="content"
+              name="content"
               label="내용"
-              value={formData.description}
+              value={formData.content}
               onChange={handleChange}
               InputLabelProps={{
                 shrink: true,
@@ -126,17 +165,28 @@ function AccountBookPage() {
             />
           </Grid>
           <Grid item xs={1}>
-            <Button variant="contained" type="submit" fullWidth>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              // onClick={handleCreateAccountBook}
+            >
               추가
             </Button>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6" align="center">
-              총 누적 금액: {calculateTotalAmount()}
-            </Typography>
-          </Grid>
         </Grid>
       </form>
+      <Grid container justifyContent="space-between">
+        <Button onClick={handlePrevMonth}>{"<"}</Button>
+        <Typography variant="h6">
+          {currentMonth.toLocaleDateString("default", { month: "long" })}{" "}
+          {currentMonth.getFullYear()}
+        </Typography>
+        <Button onClick={handleNextMonth}>{">"}</Button>
+      </Grid>
+      <Typography variant="h6" align="center">
+        총 금액: {calculateTotalAmount()}원
+      </Typography>
       <Table>
         <TableHead>
           <TableRow>
@@ -166,23 +216,33 @@ function AccountBookPage() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedAccountBook.map((expense, index) => (
-            <TableRow key={index}>
-              <TableCell>{expense.date}</TableCell>
-              <TableCell>{expense.category}</TableCell>
-              <TableCell>{expense.amount}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell>
-                <Button
-                  onClick={() => handleDelete(index)}
-                  variant="contained"
-                  color="error"
-                >
-                  삭제
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {sortedAccountBook.map((accountBook, index) => {
+            const itemDate = new Date(accountBook.useDate);
+            if (
+              itemDate.getFullYear() === currentMonth.getFullYear() &&
+              itemDate.getMonth() === currentMonth.getMonth()
+            ) {
+              return (
+                <TableRow key={index}>
+                  <TableCell>{accountBook.useDate}</TableCell>
+                  <TableCell>{accountBook.category}</TableCell>
+                  <TableCell>{accountBook.amount}</TableCell>
+                  <TableCell>{accountBook.content}</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={() => handleDelete(index)}
+                      variant="contained"
+                      color="error"
+                    >
+                      삭제
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            } else {
+              return null;
+            }
+          })}
         </TableBody>
       </Table>
     </div>
