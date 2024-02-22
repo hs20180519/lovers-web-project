@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { Grid, Typography, TextField, Button, Box } from "@mui/material";
 import {
   confirmEmailCode,
@@ -8,6 +8,8 @@ import {
 } from "../services/auth";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -93,6 +95,7 @@ function RegisterPage() {
       }
       await createUser(email, password, nickname); // 이메일 보내기 API 호출
       alert("성공적으로 회원가입을 완료했습니다..");
+      navigate("/");
     } catch (error) {
       console.error("회원가입 실패:", error.message);
       alert("회원가입에 실패했습니다. 다시 시도해주세요.");
