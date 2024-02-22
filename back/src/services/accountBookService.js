@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 class AccountBookService {
-  async createAccountBook(loverId, userId, category, amount, useDate, content) {
+  async createAccountBook(userId, loverId, category, amount, useDate, content) {
     const newAccountBook = await prisma.account_book_posts.create({
       data: {
         lover_id: loverId,
@@ -60,6 +60,18 @@ class AccountBookService {
     if (!updateAccountBook) {
       throw new Error("Failed to update account book");
     }
+  }
+
+  async findLoverIdByUserId(userId) {
+    const lover = await prisma.lovers.findFirst({
+      where: {
+        OR: [{ user_a_id: userId }, { user_b_id: userId }],
+      },
+    });
+    if (!lover) {
+      throw new Error("Failed to find lover id");
+    }
+    return lover.lover_id;
   }
 }
 
