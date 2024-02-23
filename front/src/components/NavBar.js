@@ -43,7 +43,7 @@ function NavBar() {
     <>
       <AppBar position="static">
         <Toolbar sx={{ justifyContent: "center" }}>
-          <Button component={Link} to="/" color="inherit">
+          <Button component={Link} to="/diary/posts" color="inherit">
             공유일기
           </Button>
           <Button component={Link} to="/gallery" color="inherit">
