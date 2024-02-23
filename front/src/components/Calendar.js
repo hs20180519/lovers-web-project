@@ -1,15 +1,9 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { getDaysInMonth, getDay, isSameMonth, startOfMonth } from "date-fns";
+import { getDaysInMonth, isSameMonth } from "date-fns";
 
-const Calendar = ({
-  selectedDate,
-  entries,
-  handleEditEntry,
-  handleAddEntry,
-}) => {
+const Calendar = ({ selectedDate, entries, handleEditEntry }) => {
   const daysInMonth = getDaysInMonth(selectedDate);
-  const firstDayOfMonth = getDay(startOfMonth(selectedDate));
 
   const renderCalendar = () => {
     const calendar = [];
@@ -20,11 +14,6 @@ const Calendar = ({
 
       for (let j = 0; j < 7; j++) {
         if (day <= daysInMonth) {
-          const date = new Date(
-            selectedDate.getFullYear(),
-            selectedDate.getMonth(),
-            day,
-          );
           week.push(
             <Box
               key={j}
