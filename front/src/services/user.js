@@ -2,7 +2,7 @@ import axios from "axios";
 
 const serverUrl = `http://localhost:3000`;
 
-export const getUserProfile = async (userId) => {
+export const getUserProfile = async () => {
   try {
     const userToken = sessionStorage.getItem("userToken");
     const response = await axios.get(`${serverUrl}/account/users`, {
@@ -11,7 +11,6 @@ export const getUserProfile = async (userId) => {
         Authorization: `Bearer ${userToken}`,
       },
     });
-    console.log(response);
     return response.data.user;
   } catch (error) {
     console.error("Error getting user profile:", error);

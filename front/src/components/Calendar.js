@@ -27,30 +27,35 @@ const Calendar = ({ selectedDate, entries, handleEditEntry }) => {
               }}
             >
               <Typography variant="subtitle1">{day}</Typography>
-              {entries
-                .filter(
-                  (entry) =>
-                    isSameMonth(entry.date, selectedDate) &&
-                    entry.date.getDate() === day,
-                )
-                .map((entry, index) => (
-                  <Box key={index}>
-                    <Typography variant="h6">{entry.title}</Typography>
-                    {entry.image && (
-                      <img
-                        src={entry.image}
-                        alt="diary"
-                        style={{ maxWidth: "100%", marginTop: 2 }}
-                      />
-                    )}
-                    <Button
-                      onClick={() => handleEditEntry(index)}
-                      sx={{ marginTop: 1 }}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                ))}
+              {entries &&
+                entries.map((entry, index) => {
+                  const entryDate = new Date(entry.post_date);
+                  if (
+                    isSameMonth(entryDate, selectedDate) &&
+                    entryDate.getDate() === day
+                  ) {
+                    return (
+                      <Box key={index}>
+                        <Typography variant="h6">{entry.title}</Typography>
+                        {entry.image && (
+                          <img
+                            src={entry.image}
+                            alt="diary"
+                            style={{ maxWidth: "100%", marginTop: 2 }}
+                          />
+                        )}
+                        <Button
+                          onClick={() => handleEditEntry(index)}
+                          sx={{ marginTop: 1 }}
+                        >
+                          Edit
+                        </Button>
+                      </Box>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
             </Box>,
           );
           day++;
