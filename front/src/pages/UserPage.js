@@ -15,6 +15,7 @@ import { getUserProfile } from "../services/user";
 import { applyLoverByEmail } from "../services/lover";
 import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 function UserProfile() {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ function UserProfile() {
   };
 
   return (
+    <NavBar />
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
         <Typography variant="h4">사용자 프로필</Typography>
@@ -191,13 +193,25 @@ function UserProfile() {
         <DialogActions>
           <Button onClick={handleLogoutConfirm} color="primary">
             예
+
           </Button>
-          <Button onClick={() => setDialogOpen(false)} color="primary">
-            아니요
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>
+        </Grid>
+        <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+          <DialogTitle>로그아웃 확인</DialogTitle>
+          <DialogContent>
+            <Typography>로그아웃 하시겠습니까?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleLogoutConfirm} color="primary">
+              예
+            </Button>
+            <Button onClick={() => setDialogOpen(false)} color="primary">
+              아니요
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Grid>
+    </>
   );
 }
 

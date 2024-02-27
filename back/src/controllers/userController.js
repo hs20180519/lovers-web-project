@@ -8,6 +8,7 @@ class UserController {
     const userId = req.user.user_id;
     try {
       const user = await userService.getUserProfile(userId);
+      user.loverId = await userService.getLoverIdByUserId(userId);
       res.status(201).json({ user });
     } catch (error) {
       next(error);

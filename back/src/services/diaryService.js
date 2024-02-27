@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 class DiaryService {
   async createDiaryPost(title, content, loverId, userId, postDate) {
-    await prisma.diary_posts.create({
+    const post = await prisma.diary_posts.create({
       data: {
         title,
         content,
@@ -12,10 +12,11 @@ class DiaryService {
         user_id: userId,
       },
     });
+    return post;
   }
 
   async updateDiaryPost(title, content, diaryPostId, postDate) {
-    await prisma.diary_posts.update({
+    const post = await prisma.diary_posts.update({
       where: {
         diary_post_id: diaryPostId,
       },
@@ -25,6 +26,7 @@ class DiaryService {
         post_date: postDate,
       },
     });
+    return post;
   }
 
   async deleteDiaryPost(diaryPostId) {
@@ -32,16 +34,17 @@ class DiaryService {
       where: { diary_post_id: diaryPostId },
     });
   }
-  async getMonthlyDiaryPosts(loverId, year, month) {
-    await prisma.diary_posts.findMany({
+  async getMonthlyDiaryPosts(loverId, year, month, day) {
+    const posts = await prisma.diary_posts.findMany({
       where: {
         lover_id: loverId,
         post_date: {
-          gte: new Date(year, month - 1, 1),
-          lt: new Date(year, month, 1),
+          gte: new Date(year, month - 1), // 주어진 날짜의 시작
+          lt: new Date(year, month), // 다음 날의 시작
         },
       },
     });
+    return posts;
   }
 }
 module.exports = new DiaryService();

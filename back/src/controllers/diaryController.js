@@ -1,4 +1,4 @@
-const diaryService = require("../services/DiaryService");
+const diaryService = require("../services/diaryService");
 
 class DiaryController {
   async createDiaryPost(req, res, next) {
