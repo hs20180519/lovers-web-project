@@ -22,6 +22,7 @@ function DiaryPostDialog({
   image,
   setImage,
   handleSaveEntry,
+  handleDeleteEntry,
 }) {
   return (
     <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -38,7 +39,7 @@ function DiaryPostDialog({
         <TextField
           label="Title"
           fullWidth
-          value={title}
+          value={title || ""}
           onChange={(e) => setTitle(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
@@ -47,19 +48,22 @@ function DiaryPostDialog({
           fullWidth
           multiline
           rows={4}
-          value={content}
+          value={content || ""}
           onChange={(e) => setContent(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
         <TextField
           label="Image URL"
           fullWidth
-          value={image}
+          value={image | ""}
           onChange={(e) => setImage(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
       </DialogContent>
       <DialogActions>
+        <Button onClick={handleDeleteEntry} color="error">
+          Delete
+        </Button>
         <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
         <Button onClick={handleSaveEntry} variant="contained">
           Save
