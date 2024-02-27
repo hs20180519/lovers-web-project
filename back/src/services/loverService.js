@@ -36,6 +36,7 @@ class LoverService {
     if (!applyLoverInformation) {
       throw new Error("Failed to apply lover by email");
     }
+    return applyLoverInformation;
   }
 
   async acceptLoverByEmail(applyUserEmail, acceptUserEmail) {
