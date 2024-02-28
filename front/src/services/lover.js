@@ -19,7 +19,7 @@ const serverUrl = `http://localhost:3000`;
 //   }
 // };
 
-export const getApplyUserProfile = async (userId) => {
+export const getApplyUserProfile = async () => {
   try {
     const userToken = sessionStorage.getItem("userToken");
     const response = await axios.get(`${serverUrl}/account/users`, {
