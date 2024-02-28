@@ -119,14 +119,24 @@ function UserProfile() {
               <Typography variant="body2">
                 {userData.lover_nickname || "짝꿍을 신청하세요"}
                 {userData && (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleCoupleAction}
-                    sx={{ marginLeft: "10px" }}
-                  >
-                    {userData.lover_nickname ? "커플끊기" : "커플신청하기"}
-                  </Button>
+                  <div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleCoupleAction}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      짝꿍 신청하기
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleCoupleAction}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      신청 목록 보기
+                    </Button>
+                  </div>
                 )}
               </Typography>
               <Dialog
