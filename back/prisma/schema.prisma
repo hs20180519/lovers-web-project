@@ -93,7 +93,7 @@ model users {
 model pairing_requests {
   pairing_request_id Int    @id @unique(map: "pairing_request_id_UNIQUE") @default(autoincrement())
   apply_user_email   String @unique(map: "apply_user_email_UNIQUE") @db.VarChar(30)
-  accept_user_email  String @unique(map: "accept_user_email_UNIQUE") @db.VarChar(30)
+  accept_user_email  String @db.VarChar(30)
   is_accepted        Int    @db.TinyInt
   is_applied         Int    @db.TinyInt
 }

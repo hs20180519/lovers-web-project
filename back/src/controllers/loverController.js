@@ -68,6 +68,16 @@ class LoverController {
       next(error);
     }
   }
+
+  async getAcceptUserProfile(req, res, next) {
+    const userEmail = req.user.email;
+    try {
+      const user = await loverService.getAcceptUserProfile(userEmail);
+      res.status(201).json({ user });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = new LoverController();
