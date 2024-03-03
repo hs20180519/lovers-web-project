@@ -12,7 +12,13 @@ import {
   TextField,
 } from "@mui/material";
 import { getUserProfile } from "../services/user";
-import { applyLoverByEmail } from "../services/lover";
+import {
+  applyLoverByEmail,
+  getAcceptUserProfile,
+  acceptLoverByEmail,
+  makeLoverNickname,
+  deleteLoverByUserId,
+} from "../services/lover";
 import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -21,26 +27,21 @@ function UserProfile() {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState(null);
-  // const [loverData, setLoverData] = useState(null);
-  // const [applyUserData, setApplyUserData] = useState(null);
-  // const [accpetUserData, setAcceptUserData] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [applyLoverDialogOpen, setApplyLoverDialogOpen] = useState(false);
+  const [acceptUserData, setAcceptUserData] = useState(null);
+  const [acceptLoverDialogOpen, setAcceptLoverDialogOpen] = useState(false);
   const [acceptUserEmail, setAcceptUserEmail] = useState("");
   const [isAcceptUserEmailValid, setIsAcceptUserEmailValid] = useState(true);
+  const [loverNicknameDialogOpen, setLoverNicknameDialogOpen] = useState(false);
   const [loverNickname, setLoverNickname] = useState("");
+  const [deleteLoverDialogOpen, setDeleteloverDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userProfile = await getUserProfile();
         setUserData(userProfile);
-        // const applyUserProfile = await getApplyUserProfile(userData.user_id);
-        // setApplyUserData(applyUserProfile);
-        // const acceptUserProfile = await getAcceptUserProfile(userData.user_id);
-        // setAcceptUserData(acceptUserProfile);
-        // const loverInformation = await getLoverInformation();
-        // setLoverData(loverInformation);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
@@ -66,19 +67,8 @@ function UserProfile() {
     navigate("/");
   };
 
-  const handleCoupleAction = () => {
+  const handleApplyLoverAction = () => {
     setApplyLoverDialogOpen(true);
-  };
-
-  const handleAcceptUserEmailChange = (e) => {
-    const acceptUserEmailValue = e.target.value;
-    setIsAcceptUserEmailValid(validateAcceptUserEmail(acceptUserEmail));
-    setAcceptUserEmail(acceptUserEmailValue);
-  };
-
-  const handleLoverNicknameChange = (e) => {
-    const nicknameValue = e.target.value;
-    setLoverNickname(nicknameValue);
   };
 
   const handleApplyLoverConfirm = async () => {
@@ -87,12 +77,52 @@ function UserProfile() {
         alert("정확한 이메일을 입력해주세요.");
         return;
       }
-      await setApplyLoverDialogOpen(false);
+      setApplyLoverDialogOpen(false);
       await applyLoverByEmail(acceptUserEmail);
     } catch (error) {
       console.error("짝꿍 신청 실패: ", error.message);
       alert("짝꿍 신청에 실패했습니다. 다시 시도해주세요.");
     }
+  };
+
+  const handleAcceptLoverAction = async () => {
+    setAcceptLoverDialogOpen(true);
+    const acceptUserProfile = await getAcceptUserProfile();
+    setAcceptUserData(acceptUserProfile);
+  };
+
+  const handleAcceptUserEmail = (e) => {
+    const acceptUserEmailValue = e.target.value;
+    setIsAcceptUserEmailValid(validateAcceptUserEmail(acceptUserEmail));
+    setAcceptUserEmail(acceptUserEmailValue);
+  };
+
+  const handleAccepLoverByEmail = async (applyUserEmail) => {
+    await acceptLoverByEmail(applyUserEmail);
+    setAcceptLoverDialogOpen(false);
+  };
+
+  const handleMakeLoverNicknameAction = () => {
+    setLoverNicknameDialogOpen(true);
+  };
+
+  const handleMakeLoverNickname = (e) => {
+    const loverNicknameValue = e.target.value;
+    setLoverNickname(loverNicknameValue);
+  };
+
+  const handleMakeLoverNicknameConfirm = async () => {
+    await makeLoverNickname(loverNickname);
+    setLoverNicknameDialogOpen(false);
+  };
+
+  const handleDeleteLoverAction = () => {
+    setDeleteloverDialogOpen(true);
+  };
+
+  const handleDeleteLoverConfirm = async () => {
+    await deleteLoverByUserId();
+    setDeleteloverDialogOpen(false);
   };
 
   return (
@@ -123,18 +153,34 @@ function UserProfile() {
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={handleCoupleAction}
+                      onClick={handleApplyLoverAction}
                       sx={{ marginLeft: "10px" }}
                     >
-                      짝꿍 신청하기
+                      짝꿍 신청
                     </Button>
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={handleCoupleAction}
+                      onClick={handleAcceptLoverAction}
                       sx={{ marginLeft: "10px" }}
                     >
-                      신청 목록 보기
+                      신청 목록
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleMakeLoverNicknameAction}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      애칭 지정
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleDeleteLoverAction}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      짝꿍 끊기
                     </Button>
                   </div>
                 )}
@@ -156,18 +202,7 @@ function UserProfile() {
                     name="acceptUserEmail"
                     fullWidth
                     value={acceptUserEmail}
-                    onChange={handleAcceptUserEmailChange}
-                  ></TextField>
-                  <Typography variant="h7">
-                    상대방의 애칭을 입력해주세요
-                  </Typography>
-                  <TextField
-                    type="text"
-                    id="loverNickname"
-                    name="loverNickname"
-                    fullWidth
-                    value={loverNickname}
-                    onChange={handleLoverNicknameChange}
+                    onChange={handleAcceptUserEmail}
                   ></TextField>
                 </DialogContent>
                 <DialogActions>
@@ -182,7 +217,98 @@ function UserProfile() {
                   </Button>
                 </DialogActions>
               </Dialog>
-              {/* 기타 사용자 정보 표시 */}
+              <Dialog
+                open={acceptLoverDialogOpen}
+                onClose={() => setAcceptLoverDialogOpen(false)}
+              >
+                <DialogTitle style={{ textAlign: "center" }}>
+                  신청 목록
+                </DialogTitle>
+                <DialogContent>
+                  {acceptUserData !== null && acceptUserData !== undefined
+                    ? acceptUserData.map((acceptUser, index) => (
+                        <div key={index} style={{ marginBottom: "10px" }}>
+                          신청자: {acceptUser.apply_user_email}
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginLeft: "10px" }}
+                            onClick={() =>
+                              handleAccepLoverByEmail(
+                                acceptUser.apply_user_email
+                              )
+                            }
+                          >
+                            수락
+                          </Button>
+                        </div>
+                      ))
+                    : "없음"}
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={loverNicknameDialogOpen}
+                onClose={() => setLoverNicknameDialogOpen(false)}
+              >
+                <DialogTitle style={{ textAlign: "center" }}>
+                  애칭 지정하기
+                </DialogTitle>
+                <DialogContent style={{ width: "300px" }}>
+                  <Typography variant="h7">
+                    상대방의 애칭을 입력해주세요
+                  </Typography>
+                  <TextField
+                    type="text"
+                    id="loverNickname"
+                    name="loverNickname"
+                    fullWidth
+                    value={loverNickname}
+                    onChange={handleMakeLoverNickname}
+                  ></TextField>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    onClick={handleMakeLoverNicknameConfirm}
+                    color="primary"
+                  >
+                    저장
+                  </Button>
+                  <Button
+                    onClick={() => setLoverNicknameDialogOpen(false)}
+                    color="primary"
+                  >
+                    취소
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={deleteLoverDialogOpen}
+                onClose={() => setDeleteloverDialogOpen(false)}
+              >
+                <DialogTitle
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  짝꿍 끊기
+                </DialogTitle>
+                <DialogContent style={{ textAlign: "center", width: "300px" }}>
+                  <Typography variant="body1" style={{ fontSize: "1.2rem" }}>
+                    짝꿍을 끊으시겠습니까?
+                  </Typography>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleDeleteLoverConfirm} color="primary">
+                    예
+                  </Button>
+                  <Button
+                    onClick={() => setDeleteloverDialogOpen(false)}
+                    color="primary"
+                  >
+                    아니요
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Paper>
           )}
         </Grid>
