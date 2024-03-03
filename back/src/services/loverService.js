@@ -93,6 +93,17 @@ class LoverService {
       throw new Error("Failed to make lover nickname");
     }
   }
+
+  async getAcceptUserProfile(userEmail) {
+    const user = await prisma.pairing_requests.findMany({
+      where: { accept_user_email: userEmail },
+    });
+    if (!user) {
+      throw new Error("Failed to get accept user profile");
+    }
+    console.log("user: ", user);
+    return user;
+  }
 }
 
 module.exports = new LoverService();
