@@ -9,6 +9,9 @@ class GalleryService {
         photo_date: new Date(),
       },
     });
+    if (!photo) {
+      throw new Error("createGalleryPhoto error");
+    }
     return photo;
   }
   async getAllGalleryPhotos(loverId) {

@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AccountBookPage from "./pages/AccountBookPage";
 import UserPage from "./pages/UserPage";
 import DiaryPage from "./pages/DiaryPage";
+import GalleryPage from "./pages/GalleryPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/accountbook/posts" element={<AccountBookPage />} />
         <Route path="/account/users" element={<UserPage />} />
         <Route path="/diary/posts" element={<DiaryPage />} />
+        <Route path="/gallery/posts" element={<GalleryPage />} />
       </Routes>
     </Router>
   );
